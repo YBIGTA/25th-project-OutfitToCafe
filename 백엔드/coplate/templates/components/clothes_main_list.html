@@ -1,0 +1,15 @@
+  
+  <div class="contents_clothes">
+    
+    {% for review in reviews %}
+      <a href="{% url 'review-detail' review.id %}">
+        <div class="clothes_main">
+          <div style="background-image: url('{{ review.image1.url }}');"></div>
+          
+        </div>
+        
+      </a>
+    {% empty %}
+      <p class="empty">{{ empty_message }}</p>
+    {% endfor %}
+  </div>
