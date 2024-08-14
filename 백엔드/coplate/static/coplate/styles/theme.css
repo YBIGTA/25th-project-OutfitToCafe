@@ -278,6 +278,24 @@ textarea.cp-input {
   background-color: var(--chip-green-background);
   border-color: var(--chip-green-border);
 }
+.cp-chip-keyword {
+  display: inline-block;
+  padding: 0 17px;
+  font-size: 20px;
+  line-height: 32px;
+  color: var(--chip-text);
+  border: 1px solid var(--chip-border);
+  border-radius: 9999px;
+  margin: 7px 7px;
+}
+
+.cp-chip-keyword.green {
+  padding: 0 13px;
+  line-height: 27px;
+  color: var(--chip-green-text);
+  background-color: var(--chip-green-background);
+  border-color: var(--chip-green-border);
+}
 
 /* Avatar */
 
@@ -308,6 +326,14 @@ textarea.cp-input {
   box-shadow: 0 3px 16px 0 #f1ece2;
   background-color: #ffffff;
   will-change: box-shadow;
+}
+.cp-card-around{
+  border-radius: 21px;
+  box-shadow: 0 3px 16px 0 #f1ece2;
+  background-color: #ffffff;
+  will-change: box-shadow;
+  width:500px;
+
 }
 
 /* Dialog */

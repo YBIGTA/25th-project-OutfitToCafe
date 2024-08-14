@@ -20,7 +20,9 @@ from django.db.models import Q
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         context = {}
-        context['latest_reviews'] = Review.objects.all()[0:4]
+        context['latest_reviews'] = Review.objects.all()[0:20] # index에 보여지는거 몇개 보내줄지 
+        context['restaurant_names'] = Review.objects.values_list('restaurant_name', flat=True).distinct()[:9] 
+        # 위에 코드를 빈도가 제일 많은 키워드로 검색되게 만들어야 함 > review_keyword라는 모델을 만들어서 거기서 제일 많이 빈출되는 단어 넣어주고 그거 뽑아오기 
         user = self.request.user
         if user.is_authenticated:
             context['latest_following_reviews'] = Review.objects.filter(author__followers=user)[:4]
@@ -39,20 +41,20 @@ class FollowingReviewListView(LoginRequiredMixin, ListView):
 
 class SearchView(ListView):
     model = Review
-    context_object_name = 'search_results'
+    context_object_name = 'search_results' # 해당 템플릿에서 search_results로 사용가능 
     template_name = 'coplate/search_result.html'
     paginate_by = 8 
 
-    def get_queryset(self):
+    def get_queryset(self): # listview에서 보여줄 객체의 리스트를 반환하는 역할 
         query = self.request.GET.get('query','')
         return Review.objects.filter(
-            Q(title__icontains=query)
+            Q(title__icontains=query) # icontains > 대소문자 구분없이 
             | Q(restaurant_name__icontains=query)
             | Q(content__icontains=query)
         )
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs): # 템플릿에 전달할 추가적인 데이터 전달 
+        context = super().get_context_data(**kwargs) # 이거는 사용자가 입력한 query도 같이 넘김 
         context['query'] = self.request.GET.get('query','')
         return context 
 
@@ -60,18 +62,30 @@ class ReviewListView(ListView):
     model = Review
     context_object_name = 'reviews'
     template_name = 'coplate/review_list.html'
-    paginate_by = 8
+    paginate_by = 12
 
 class ClothesListView(ListView):
     model = Review
     context_object_name = 'reviews'
     template_name = 'coplate/clothes_list.html'
-    paginate_by = 8
+    paginate_by = 12
 class ClothesMainListView(ListView):
     model = Review
     context_object_name = 'reviews'
     template_name = 'coplate/clothes_main_list.html'
+    paginate_by = 12
+
+class CaffeAroundListView(ListView): # index 파일에 보이는거
+    model = Review
+    context_object_name = 'reviews'
+    template_name = 'coplate/clothes_list.html'
     paginate_by = 8
+class CaffeAroundMainListView(ListView):# 더보기 누르고 보이는 거 
+    model = Review
+    context_object_name = 'reviews'
+    template_name = 'coplate/clothes_main_list.html'
+    paginate_by = 8
+
 
 class ReviewDetailView(DetailView):
     model = Review
@@ -80,7 +94,7 @@ class ReviewDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = CommentForm()
+        context['form'] = CommentForm() # 이렇게 하면 detail.html에서 form.comment 이런식으로 접근가능 
         context['review_ctype_id'] = ContentType.objects.get(model='review').id
         context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
 
@@ -173,18 +187,21 @@ class ReviewDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
         return review.author == user
 
 class ProcessLikeView(LoginAndverificationRequiredMixin, View):
-    http_method_names = ['post']
-
-    def post(self, request, *args, **kwargs):
-        like, created = Like.objects.get_or_create(
-            user=self.request.user,
+    http_method_names = ['post'] # post만 처리 되게 끔 
+    # args 위치 인자 들의 튜플을 의미 함수에 몇개의 인자가 전달될지 알 수 없을 때 > 튜플로 묶어줌 
+    # 키워드 인자가 들의 딕셔너리 > 마찬가지로 알 수 없을 때 딕셔너리로 묶어줌 
+    # 동시에 사용하면 위치 인자 , 키워드 인자 모두 받을 수 있음 
+    # example_function(1, 2, 3, a=4, b=5) 이런식으로 
+    def post(self, request, *args, **kwargs): # post에 대한 정의 
+        like, created = Like.objects.get_or_create( # 객체가 없다면 생성 
+            user=self.request.user, # 이련식으로 
             content_type_id = self.kwargs.get('content_type_id'),
             object_id = self.kwargs.get('object_id')
         )
         if not created:
             like.delete()
         
-        return redirect(self.request.META['HTTP_REFERER'])
+        return redirect(self.request.META['HTTP_REFERER']) # 요청이 들어온 페이지 url을 참조하여 다시 보냄 
 
 
 class ProfileView(DetailView):

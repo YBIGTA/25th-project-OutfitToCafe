@@ -26,6 +26,10 @@ urlpatterns = [
     path('clothes/',views.ClothesListView.as_view(),name='clothes-list'),
     path('clothes/list/',views.ClothesMainListView.as_view(),name='clothes-main-list'),
 
+    # around 
+    path('around/',views.CaffeAroundListView.as_view(),name='around-list'), 
+    path('around/list',views.CaffeAroundMainListView.as_view(),name='around-main-list'),
+
     # comment
     path(
         'reviews/<int:review_id>/comments/create/',
@@ -42,7 +46,7 @@ urlpatterns = [
 
     # like
     path(
-        'like/<int:content_type_id>/<int:object_id>/',
+        'like/<int:content_type_id>/<int:object_id>/', # 이미 그 좋아요에는 contetn_type 이 이미 있는거임 
         views.ProcessLikeView.as_view(),
         name='process-like'
     ),
