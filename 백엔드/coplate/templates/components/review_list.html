@@ -2,6 +2,7 @@
   {% for review in reviews %}
     <a href="{% url 'review-detail' review.id %}">
       <section class="cp-card content">
+        <!-- <div class="thumb" style="background-image: url('{{ review.image1 }}');"></div> -->
         <div class="thumb" style="background-image: url('{{ review.image1.url }}');"></div>
         <div class="body">
           <span class="cp-chip green">{{ review.restaurant_name }}</span>

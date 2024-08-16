@@ -1,6 +1,9 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from .utils import upload_file_to_s3  # S3 업로드 유틸리티 함수 임포트
+from django.conf import settings
+
 from django.views.generic import (
     View,
     ListView, 
@@ -107,6 +110,18 @@ class ReviewDetailView(DetailView):
         return context 
 
 
+# class ReviewCreateView(LoginAndverificationRequiredMixin, CreateView):
+#     model = Review
+#     form_class = ReviewForm
+#     template_name = 'coplate/review_form.html'
+
+#     def form_valid(self, form):
+#         form.instance.author = self.request.user
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return reverse('review-detail', kwargs={'review_id': self.object.id})
+ 
 class ReviewCreateView(LoginAndverificationRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
@@ -114,12 +129,21 @@ class ReviewCreateView(LoginAndverificationRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
+        # 이미지 필드 목록
+        image_fields = ['image1', 'image2', 'image3', 'image4']
+
+        for image_field in image_fields:
+            image = self.request.FILES.get(image_field)
+            if image:
+                # S3에 파일 업로드하고 URL을 모델 필드에 저장
+                image_url = upload_file_to_s3(image, settings.AWS_STORAGE_BUCKET_NAME, 'drip-shot')
+                setattr(form.instance, f"{image_field}_url", image_url)
+
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('review-detail', kwargs={'review_id': self.object.id})
- 
-
 class ReviewUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
