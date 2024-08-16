@@ -124,16 +124,16 @@ CORS_ALLOW_CREDENTIALS = True
 #         'PORT':env("DB_PORT"), 
 #     }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': 'sharon11@@',
-#         'HOST':'localhost',# 원격 서버 이용하면 바꿔야됨 
-#         'PORT':'5432', 
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'drip_shot',
+        'USER': 'isaac',
+        'PASSWORD': 'sharon11@@',
+        'HOST':'localhost',# 원격 서버 이용하면 바꿔야됨 
+        'PORT':'5432', 
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
