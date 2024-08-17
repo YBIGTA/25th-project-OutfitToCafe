@@ -1,16 +1,16 @@
 from django import forms
 
-from .models import User, Review , Comment
+from .models import * 
 
 
-class ReviewForm(forms.ModelForm):
+class ReviewForm(forms.ModelForm): # 카페 추가 창 만들때 사용하는거
     class Meta:
-        model = Review
+        model = Caffe
         fields = [
-            'title',
-            'restaurant_name',
-            'restaurant_link',
-            'rating',
+            'name',
+            'location',
+            'location_url',
+            'instagram_url',
             'image1',
             'image2',
             'image3',
@@ -25,14 +25,13 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'nickname',
+            'user_name',
+            'gender',
+            'age',
+            'location',
             'profile_pic',
-            'intro',
         ]
-        widgets = {
-            'intro': forms.Textarea,
-        }
-
+       
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
