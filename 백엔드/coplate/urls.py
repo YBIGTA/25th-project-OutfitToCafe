@@ -9,26 +9,38 @@ urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('account_login'), permanent=False)), # 처음 페이지를 로그인 화면으로 바꾸기 
     # review
     path('index', views.IndexView.as_view(), name='index'),
-    path('reviews/', views.ReviewListView.as_view(), name='review-list'),
-    path('reviews/<int:review_id>/', views.ReviewDetailView.as_view(), name='review-detail'),
-    path('reviews/new/', views.ReviewCreateView.as_view(), name='review-create'),
-    path('reviews/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='review-update'),
+    path('caffe/', views.CaffeListView.as_view(), name='caffe-list'),
+    path('caffe/<int:caffe_id>/', views.CaffeDetailView.as_view(), name='caffe-detail'),
+    path('caffe/new/', views.CaffeCreateView.as_view(), name='caffe-create'),
+    path('caffe/<int:review_id>/edit/', views.CaffeUpdateView.as_view(), name='caffe-update'),
     path('search/',views.SearchView.as_view(), name='search'),
-    path('reviews/<int:review_id>/delete/', views.ReviewDeleteView.as_view(), name='review-delete'),
-    path('reviews/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
+    path('caffe/<int:caffe_id>/delete/', views.CaffeDeleteView.as_view(), name='caffe-delete'),
+    path('caffe/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
+   
     # profile
     path('users/<int:user_id>/', views.ProfileView.as_view(), name='profile'),
     path('users/<int:user_id>/reviews/', views.UserReviewListView.as_view(), name='user-review-list'),
     path('set-profile/', views.ProfileSetView.as_view(), name='profile-set'),
     path('edit-profile/', views.ProfileUpdateView.as_view(), name='profile-update'),
 
-    # clothes
-    path('clothes/',views.ClothesListView.as_view(),name='clothes-list'),
-    path('clothes/list/',views.ClothesMainListView.as_view(),name='clothes-main-list'),
+    # dripshot
+    path('dripshot/',views.DripshotsListView.as_view(),name='clothes-list'),
+    path('drip_shot/list/',views.DripshotsMainListView.as_view(),name='clothes-main-list'), # 여기까지 만듬 
+    path('caffes/<int:caffe_id>/', views.ReviewDetailView.as_view(), name='dripshot-detail'),
+    path('caffes/new/', views.ReviewCreateView.as_view(), name='dripshot-create'),
+    path('caffes/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='dripshot-update'),
+    path('caffes/<int:caffe_id>/delete/', views.ReviewDeleteView.as_view(), name='dripshot-delete'),
+    path('caffes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
 
     # around 
     path('around/',views.CaffeAroundListView.as_view(),name='around-list'), 
     path('around/list',views.CaffeAroundMainListView.as_view(),name='around-main-list'),
+    path('caffes/<int:caffe_id>/', views.ReviewDetailView.as_view(), name='around-detail'),
+    path('caffes/new/', views.ReviewCreateView.as_view(), name='around-create'),
+    path('caffes/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='around-update'),
+    path('caffes/<int:caffe_id>/delete/', views.ReviewDeleteView.as_view(), name='around-delete'),
+    path('caffes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
+
 
     # comment
     path(

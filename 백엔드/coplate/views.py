@@ -17,40 +17,68 @@ from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
 from allauth.account.views import PasswordChangeView
 from .mixins import LoginAndverificationRequiredMixin ,LoginAndOwnershipRequiredMixin
-from .models import Review, User , Comment , Like
-from .forms import ReviewForm, ProfileForm ,CommentForm
-from django.db.models import Q
+from .models import *
+from .forms import *
+from django.db.models import Q,Count
+
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         context = {}
-        context['latest_reviews'] = Review.objects.all()[0:20] # index에 보여지는거 몇개 보내줄지 
-        context['restaurant_names'] = Review.objects.values_list('restaurant_name', flat=True).distinct()[:9] 
-        # 위에 코드를 빈도가 제일 많은 키워드로 검색되게 만들어야 함 > review_keyword라는 모델을 만들어서 거기서 제일 많이 빈출되는 단어 넣어주고 그거 뽑아오기 
-        user = self.request.user
-        if user.is_authenticated:
-            context['latest_following_reviews'] = Review.objects.filter(author__followers=user)[:4]
-        return render(request, 'coplate/index.html', context)
 
+        # 드립샷 리뷰 가져오기
+        context['drip_shot_review'] = Dripshot.objects.all()[0:20]
+
+        # 키워드 빈도순으로 가져오기
+        context['caffe_keywords'] = Caffe.objects.values_list('caffe_keywords', flat=True).distinct()[:9]
+
+        # 현재 로그인한 사용자
+        user = self.request.user
+
+        if user.is_authenticated:
+            # 사용자의 스타일 키워드 가져오기
+            user_keywords = user.style_keywords.all()
+
+            # Q 객체를 사용하여 조건 생성
+            query = Q()
+            for keyword in user_keywords:
+                query |= Q(style_keywords=keyword)
+            
+            # 2개 이상의 키워드가 일치하는 카페 필터링
+            matching_caffes = Caffe.objects.filter(query).annotate(
+                matching_keywords_count=Count('style_keywords')
+            ).filter(matching_keywords_count__gte=2).distinct()
+
+            context['matching_caffes'] = matching_caffes
+
+            # 사용자가 팔로우한 작성자의 최신 리뷰 가져오기
+            context['latest_following_reviews'] = Caffe.objects.filter(author__followers=user)[:4]
+
+            # 사용자의 추천 위치와 일치하는 주변 카페 필터링
+            if user.recommend_location:
+                nearby_caffes = Caffe.objects.filter(location__icontains=user.recommend_location)
+                context['nearby_caffes'] = nearby_caffes
+        
+        return render(request, 'coplate/index.html', context)
 class FollowingReviewListView(LoginRequiredMixin, ListView):
-    model = Review
+    model = Caffe
     context_object_name = 'following_reviews'
     template_name = 'coplate/following_review_list.html'
     paginate_by = 8
 
     def get_queryset(self):
-        return Review.objects.filter(author__followers=self.request.user)
+        return Caffe.objects.filter(author__followers=self.request.user)
 
 
 
 class SearchView(ListView):
-    model = Review
+    model = Caffe
     context_object_name = 'search_results' # 해당 템플릿에서 search_results로 사용가능 
     template_name = 'coplate/search_result.html'
     paginate_by = 8 
 
     def get_queryset(self): # listview에서 보여줄 객체의 리스트를 반환하는 역할 
         query = self.request.GET.get('query','')
-        return Review.objects.filter(
+        return Caffe.objects.filter(
             Q(title__icontains=query) # icontains > 대소문자 구분없이 
             | Q(restaurant_name__icontains=query)
             | Q(content__icontains=query)
@@ -61,53 +89,78 @@ class SearchView(ListView):
         context['query'] = self.request.GET.get('query','')
         return context 
 
-class ReviewListView(ListView):
-    model = Review
-    context_object_name = 'reviews'
-    template_name = 'coplate/review_list.html'
+class CaffeListView(ListView):
+    model = Caffe
+    context_object_name = 'caffe'
+    template_name = 'coplate/caffe_list.html'
     paginate_by = 12
 
-class ClothesListView(ListView):
-    model = Review
-    context_object_name = 'reviews'
+class DripshotsListView(ListView):
+    model = Dripshot
+    context_object_name = 'dripshots'
     template_name = 'coplate/clothes_list.html'
     paginate_by = 12
-class ClothesMainListView(ListView):
-    model = Review
-    context_object_name = 'reviews'
+class DripshotsMainListView(ListView):
+    model = Dripshot
+    context_object_name = 'dripshots'
     template_name = 'coplate/clothes_main_list.html'
     paginate_by = 12
 
 class CaffeAroundListView(ListView): # index 파일에 보이는거
-    model = Review
-    context_object_name = 'reviews'
+    model = Caffe
+    context_object_name = 'caffes'
     template_name = 'coplate/clothes_list.html'
     paginate_by = 8
 class CaffeAroundMainListView(ListView):# 더보기 누르고 보이는 거 
-    model = Review
-    context_object_name = 'reviews'
+    model = Caffe
+    context_object_name = 'caffes'
     template_name = 'coplate/clothes_main_list.html'
     paginate_by = 8
 
 
-class ReviewDetailView(DetailView):
-    model = Review
-    template_name = 'coplate/review_detail.html'
-    pk_url_kwarg = 'review_id'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = CommentForm() # 이렇게 하면 detail.html에서 form.comment 이런식으로 접근가능 
-        context['review_ctype_id'] = ContentType.objects.get(model='review').id
-        context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
+class CaffeCreateView(LoginAndverificationRequiredMixin, CreateView):
+    model = Caffe
+    form_class = CaffeForm
+    template_name = 'coplate/caffe_form.html'
+    # 버튼을 클릭하면 이 url로 가고 성공하면 밑에 url로 감 
+    # form_valid 는 폼이 유효하면 실행됨 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
 
-        user = self.request.user
-        if user.is_authenticated :
-            review = self.object
-            context['likes_review'] = Like.objects.filter(user=user, review=review).exists()
-            context['liked_comments'] = Comment.objects.filter(review=review).filter(likes__user=user)
+        # 이미지 필드 목록
+        image_fields = ['image1', 'image2', 'image3', 'image4','image5']
 
-        return context 
+        for image_field in image_fields:
+            image = self.request.FILES.get(image_field)
+            if image:
+                # S3에 파일 업로드하고 URL을 모델 필드에 저장
+                image_url = upload_file_to_s3(image, settings.AWS_STORAGE_BUCKET_NAME, 'drip-shot')
+                setattr(form.instance, f"{image_field}_url", image_url)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('caffe-detail', kwargs={'caffe_id': self.object.id})
+
+# class CaffeDetailView(DetailView):
+#     model = Caffe
+#     template_name = 'coplate/review_detail.html'
+#     pk_url_kwarg = 'caffe_id'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['form'] = CommentForm() # 이렇게 하면 detail.html에서 form.comment 이런식으로 접근가능 
+#         context['caffe_ctype_id'] = ContentType.objects.get(model='caffe').id
+#         context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
+
+#         user = self.request.user
+#         if user.is_authenticated :
+#             caffe = self.object
+#             context['likes_caffe'] = Like.objects.filter(user=user, caffe=caffe).exists()
+#             context['liked_comments'] = Comment.objects.filter(caffe=caffe).filter(likes__user=user)
+
+#         return context 
 
 
 # class ReviewCreateView(LoginAndverificationRequiredMixin, CreateView):
@@ -122,43 +175,53 @@ class ReviewDetailView(DetailView):
 #     def get_success_url(self):
 #         return reverse('review-detail', kwargs={'review_id': self.object.id})
  
-class ReviewCreateView(LoginAndverificationRequiredMixin, CreateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'coplate/review_form.html'
+class CaffeDetailView(DetailView):
+    model = Caffe
+    template_name = 'coplate/review_detail.html'
+    pk_url_kwarg = 'caffe_id'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentForm()
+        context['caffe_ctype_id'] = ContentType.objects.get(model='caffe').id
+        context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
+        user = self.request.user
+        if user.is_authenticated:
+            caffe = self.object
+            context['likes_caffe'] = Like.objects.filter(user=user, content_type=context['caffe_ctype_id'], object_id=caffe.id).exists()
+            context['liked_comments'] = Comment.objects.filter(caffe=caffe).filter(likes__user=user)
 
-        # 이미지 필드 목록
-        image_fields = ['image1', 'image2', 'image3', 'image4']
+        return context
 
-        for image_field in image_fields:
-            image = self.request.FILES.get(image_field)
-            if image:
-                # S3에 파일 업로드하고 URL을 모델 필드에 저장
-                image_url = upload_file_to_s3(image, settings.AWS_STORAGE_BUCKET_NAME, 'drip-shot')
-                setattr(form.instance, f"{image_field}_url", image_url)
 
-        return super().form_valid(form)
+class CaffeDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
+    model = Caffe
+    template_name = 'coplate/caffe_confirm_delete.html'
+    pk_url_kwarg = 'caffe_id'
 
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'review_id': self.object.id})
-class ReviewUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'coplate/review_form.html'
-    pk_url_kwarg = 'review_id'
+        return reverse('index') 
+
+    def test_func(self, user):
+        caffe = self.get_object()
+        return caffe.author == user
+
+    
+class CaffeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
+    model = Caffe
+    form_class = CaffeForm
+    template_name = 'coplate/caffe_form.html'
+    pk_url_kwarg = 'caffe_id'
 
     redirect_unauthenticated_users = False
     raise_exception = True
 
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'review_id': self.object.id})
+        return reverse('caffe-detail', kwargs={'caffe_id': self.object.id})
 
     def test_func(self, user):
-        review = self.get_object()
-        return review.author == user
+        caffe = self.get_object()
+        return caffe.author == user
 
 
 # 이미 detail 부분에 다 보내놓고 (좋아요와 댓글할 수 있는거를 ) > url설정 해 놓고 > 그 칸을 클릭하고 그 안에 값을 
@@ -173,7 +236,7 @@ class CommentCreateView(LoginAndverificationRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.review = Review.objects.get(id=self.kwargs.get('review_id'))
+        form.instance.review = Caffe.objects.get(id=self.kwargs.get('review_id'))
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -198,17 +261,6 @@ class CommentDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
         return reverse('review-detail', kwargs={'review_id': self.object.review.id})
 
 
-class ReviewDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
-    model = Review
-    template_name = 'coplate/review_confirm_delete.html'
-    pk_url_kwarg = 'review_id'
-
-    def get_success_url(self):
-        return reverse('index') 
-
-    def test_func(self, user):
-        review = self.get_object()
-        return review.author == user
 
 class ProcessLikeView(LoginAndverificationRequiredMixin, View):
     http_method_names = ['post'] # post만 처리 되게 끔 
@@ -240,7 +292,7 @@ class ProfileView(DetailView):
         profile_user_id = self.kwargs.get('user_id')
         if user.is_authenticated :
             context['is_following']=user.following.filter(id=profile_user_id).exists()
-        context['user_reviews'] = Review.objects.filter(author_id=profile_user_id)[:4]
+        context['user_reviews'] = Caffe.objects.filter(author_id=profile_user_id)[:4]
         return context
 
 
@@ -257,13 +309,13 @@ class ProcessFollowView(LoginAndverificationRequiredMixin, View):
         return redirect('profile',user_id=profile_user_id)
 
 class UserReviewListView(ListView):
-    model = Review
+    model = Caffe
     template_name = 'coplate/user_review_list.html'
     context_object_name = 'user_reviews'
     paginate_by = 4
 
     def get_queryset(self):
-        return Review.objects.filter(author__id=self.kwargs.get('user_id'))
+        return Caffe.objects.filter(author__id=self.kwargs.get('user_id'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -331,3 +383,74 @@ class FollowerListView(ListView):
         context = super().get_context_data(**kwargs)
         context['profile_user_id'] = self.kwargs.get('user_id')
         return context
+
+
+
+class DripshotDetailView(DetailView):
+    model = Caffe
+    template_name = 'coplate/review_detail.html'
+    pk_url_kwarg = 'review_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentForm() # 이렇게 하면 detail.html에서 form.comment 이런식으로 접근가능 
+        context['review_ctype_id'] = ContentType.objects.get(model='review').id
+        context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
+
+        user = self.request.user
+        if user.is_authenticated :
+            review = self.object
+            context['likes_review'] = Like.objects.filter(user=user, review=review).exists()
+            context['liked_comments'] = Comment.objects.filter(review=review).filter(likes__user=user)
+
+        return context 
+    
+class CaffeCreateView(LoginAndverificationRequiredMixin, CreateView):
+    model = Caffe
+    form_class = ReviewForm
+    template_name = 'coplate/review_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+
+        # 이미지 필드 목록
+        image_fields = ['image1', 'image2', 'image3', 'image4']
+
+        for image_field in image_fields:
+            image = self.request.FILES.get(image_field)
+            if image:
+                # S3에 파일 업로드하고 URL을 모델 필드에 저장
+                image_url = upload_file_to_s3(image, settings.AWS_STORAGE_BUCKET_NAME, 'drip-shot')
+                setattr(form.instance, f"{image_field}_url", image_url)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('review-detail', kwargs={'review_id': self.object.id})
+class CaffeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
+    model = Caffe
+    form_class = ReviewForm
+    template_name = 'coplate/review_form.html'
+    pk_url_kwarg = 'review_id'
+
+    redirect_unauthenticated_users = False
+    raise_exception = True
+
+    def get_success_url(self):
+        return reverse('review-detail', kwargs={'review_id': self.object.id})
+
+    def test_func(self, user):
+        review = self.get_object()
+        return review.author == user
+    
+class CaffeDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
+    model = Caffe
+    template_name = 'coplate/review_confirm_delete.html'
+    pk_url_kwarg = 'review_id'
+
+    def get_success_url(self):
+        return reverse('index') 
+
+    def test_func(self, user):
+        review = self.get_object()
+        return review.author == user

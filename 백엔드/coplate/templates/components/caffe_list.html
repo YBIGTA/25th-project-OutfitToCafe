@@ -1,0 +1,29 @@
+<div class="contents">
+  {% for caffes in matching_caffes %}
+    <a href="{% url 'review-detail' review.id %}">
+      <section class="cp-card content">
+        <!-- <div class="thumb" style="background-image: url('{{ review.image1 }}');"></div> -->
+        <div class="thumb" style="background-image: url('{{ caffes.image1.url }}');"></div>
+        <div class="body">
+          <span class="cp-chip green">{{ caffes.name }}</span>
+          <h2 class="title">{{ caffes.title }}</h2>
+          <date class="date">{{ caffes.dt_created|date:"Y년 n월 j일" }}</date>
+          <div class="metadata">
+            <div class="review-rating">
+              <span class="cp-stars">
+                {% for i in ""|ljust:caffes.rating %}★{% endfor %}
+              </span>
+            </div>
+            <!-- 이거는 안 보여줘도 되지 ㅇ낳나 -->
+            <!-- <div class="author">
+              <div class="cp-avatar" style="background-image: url('{{ caffes.author.profile_pic.url }}')"></div>
+              <span>{{ caffes.author.nickname }}</span>
+            </div> -->
+          </div>
+        </div>
+      </section>
+    </a>
+  {% empty %}
+    <p class="empty">{{ empty_message}}</p>
+  {% endfor %}
+</div>

@@ -35,10 +35,10 @@ class User(AbstractUser):
         (1, "남자"),
         (2, "여자")
     ]
-    age = models.IntegerField(null=False, error_messages={"null": "나이를 입력해주세요."})
+    birth_date = models.DateField(null=True, blank=True, error_messages={"null": "생년월일을 입력해주세요."})
     gender = models.IntegerField(choices=GENDER_CHOICES, default=None)
     style_keywords = models.ManyToManyField('StyleKeyword', related_name='users')
-    location = models.CharField(max_length=100, null=False, error_messages={"null": "추천장소를 입력해주세요."})
+    recommend_location = models.CharField(max_length=100, null=False, error_messages={"null": "존재하지 않는 역입니다."})
     following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followers')
 
     def __str__(self):
@@ -91,6 +91,8 @@ class Dripshot(models.Model):
     dt_created = models.DateTimeField(auto_now_add=True)
     dt_updated = models.DateTimeField(auto_now=True)
     content = models.TextField(max_length=500, blank=False)
+    caffe = models.ForeignKey(Caffe, on_delete=models.CASCADE, related_name='dripshots', null=True, blank=True)
+
     style_keywords = models.ManyToManyField('StyleKeyword', related_name='dripshots')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dripshot')
     likes = GenericRelation('Like', related_query_name='dripshot')
@@ -100,7 +102,7 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
-    liked_object = GenericForeignKey()
+    liked_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return f"({self.user}, {self.liked_object})"

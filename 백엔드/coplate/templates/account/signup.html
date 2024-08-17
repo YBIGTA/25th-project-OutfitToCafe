@@ -35,38 +35,38 @@
         {% endfor %}
       </div>
       <div>
-        {{ form.password2|add_class:"cp-input"|attr:"placeholder:이름"|add_error_class:"error" }}
-        {% for error in form.password2.errors %}
+        {{ form.name|add_class:"cp-input"|attr:"placeholder:이름"|add_error_class:"error" }}
+        {% for error in form.name.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
       <div>
-        {{ form.password2|add_class:"cp-input"|attr:"placeholder:성별 > 드롭다운"|add_error_class:"error" }}
-        {% for error in form.password2.errors %}
+        {{ form.gender|add_class:"cp-input"|attr:"placeholder:성별을 선택해주세요"|add_error_class:"error" }}
+        {% for error in form.gender.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
       <div>
-        {{ form.password2|add_class:"cp-input"|attr:"placeholder:생년월일 > 할 수 있는거 있던데 "|add_error_class:"error" }}
-        {% for error in form.password2.errors %}
+        {{ form.birth_date|add_class:"cp-input"|attr:"type:date"|attr:"placeholder:생년월일을 선택해주세요"|add_error_class:"error" }}
+        {% for error in form.birth_date.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
       <div>
-        {{ form.password2|add_class:"cp-input"|attr:"placeholder:스타일1"|add_error_class:"error" }}
-        {% for error in form.password2.errors %}
+        {{ form.recommend_location|add_class:"cp-input"|attr:"placeholder:추천받고 싶은 지하철역을 입력해주세요"|add_error_class:"error" }}
+        {% for error in form.recommend_location.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
       <div>
-        {{ form.password2|add_class:"cp-input"|attr:"placeholder:스타일 2"|add_error_class:"error" }}
-        {% for error in form.password2.errors %}
+        {{ form.profile_pic|add_class:"cp-input"|attr:"placeholder:스타일 2"|add_error_class:"error" }}
+        {% for error in form.profile_pic.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
       <div>
-        {{ form.password2|add_class:"cp-input"|attr:"placeholder:스타일 3"|add_error_class:"error" }}
-        {% for error in form.password2.errors %}
+        {{ form.style_keywords|add_class:"cp-input"|attr:"placeholder:스타일 3"|add_error_class:"error" }}
+        {% for error in form.style_keywords.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
