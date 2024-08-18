@@ -15,7 +15,7 @@
     {% comment %} with 사용하면 특정 변수 이름으로 템플릿에 전달할 수 있음 
     review_list.html 은 reviews라는 변수를 사용해서 표시하니 reviews로 넘겨주는 거임 
     쉽게 생각하면 view를 두번 거친다고 생각하면됨  {% endcomment %}
-    {% include 'components/review_list.html' with reviews=search_results empty_message="검색 결과가 없어요 :(" %}
+    {% include 'components/caffe_list.html' with caffe=search_results empty_message="검색 결과가 없어요 :(" %}
     {% if is_paginated %}
       {% include 'components/pagination.html' with page_obj=page_obj %}
     {% endif %}

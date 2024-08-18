@@ -4,6 +4,8 @@ from .models import *
 
 
 class DripshotForm(forms.ModelForm):
+    caffe = forms.CharField(label='Caffe', widget=forms.TextInput(attrs={'id': 'caffe-autocomplete'}))
+
     class Meta:
         model = Dripshot
         fields = [
@@ -18,7 +20,7 @@ class DripshotForm(forms.ModelForm):
             'caffe',
         ]
         widgets = {
-            'style_keywords': forms.CheckboxSelectMultiple(),  # 체크박스 위젯으로 설정
+            'style_keywords': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):

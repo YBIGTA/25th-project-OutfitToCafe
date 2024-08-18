@@ -1,10 +1,10 @@
   
   <div class="contents_clothes">
     
-    {% for review in reviews %}
-      <a href="{% url 'review-detail' review.id %}">
+    {% for caffe in caffes %}
+      <a href="{% url 'caffe-detail' caffe.id %}">
         <div class="clothes_main">
-          <div style="background-image: url('{{ review.image1.url }}');"></div>
+          <div style="background-image: url('{{ caffe.image1.url }}');"></div>
           
         </div>
         

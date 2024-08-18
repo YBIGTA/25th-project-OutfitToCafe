@@ -59,14 +59,16 @@ class Caffe(models.Model):
     image4_url = models.URLField(blank=True)
     image5 = models.FileField(upload_to=caffe_pic_upload_to, blank=True)
     image5_url = models.URLField(blank=True)
-    RATING_CHOICES = [
-        (1, '★'),
-        (2, '★★'),
-        (3, '★★★'),
-        (4, '★★★★'),
-        (5, '★★★★★'),
-    ]
-    rating = models.IntegerField(choices=RATING_CHOICES,blank=False,null=False)
+    # RATING_CHOICES = [
+    #     (1, '★'),
+    #     (2, '★★'),
+    #     (3, '★★★'),
+    #     (4, '★★★★'),
+    #     (5, '★★★★★'),
+    # ]
+    # rating = models.IntegerField(choices=RATING_CHOICES,blank=False,null=False)
+    rating = models.DecimalField(max_digits=4, decimal_places=1, blank=False, null=False)
+
     content = models.TextField(max_length=500, blank=False)
     dt_created = models.DateTimeField(auto_now_add=True)
     dt_updated = models.DateTimeField(auto_now=True)
@@ -88,6 +90,7 @@ class Dripshot(models.Model):
     image4_url = models.URLField(blank=True)
     image5 = models.FileField(upload_to=dripshot_pic_upload_to, blank=True)
     image5_url = models.URLField(blank=True)
+    likes = GenericRelation('Like')
     dt_created = models.DateTimeField(auto_now_add=True)
     dt_updated = models.DateTimeField(auto_now=True)
     content = models.TextField(max_length=500, blank=False)

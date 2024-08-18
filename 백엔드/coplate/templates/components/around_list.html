@@ -1,16 +1,16 @@
 <div class ="content-list"> <!-- 이렇게 감싸줘야 함 -->
 
     <div class="contents-around">
-      {% for review in reviews %}
-        <a href="{% url 'review-detail' review.id %}">
+      {% for caffe in caffes %}
+        <a href="{% url 'caffe-detail' caffe.id %}">
           <section class="cp-card content-around">
-            <div class="around" style="background-image: url('{{ review.image1.url }}');"></div>
+            <div class="around" style="background-image: url('{{ caffe.image1.url }}');"></div>
             <div class="body">
               <div class="author">
-                <div class="cp-avatar" style="background-image: url('{{ review.author.profile_pic.url }}')"></div>
-                <span>{{ review.author.nickname }}</span>
+                <div class="cp-avatar" style="background-image: url('{{ caffe.author.profile_pic.url }}')"></div>
+                <span>{{ caffe.author.nickname }}</span>
               </div>
-              <h2 class="title">{{ review.title }}</h2><!-- 카페명 -->
+              <h2 class="title">{{ caffe.title }}</h2><!-- 카페명 -->
             </div>
           </section>
         </a>

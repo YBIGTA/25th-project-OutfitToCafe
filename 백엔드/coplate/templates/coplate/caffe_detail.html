@@ -19,11 +19,15 @@
         </div>
       </a>
       <date class="date">{{ caffe.dt_created|date:"Y년 n월 j일" }}</date>
-      <div class="review-rating">
+      <!-- <div class="review-rating">
         <span class="cp-stars">
           {% for i in ""|ljust:caffe.rating %}★{% endfor %}
         </span>
-      </div>
+      </div> --> 
+      <div class="rating">
+        <!-- # 여기다가 추가적으로 css 넣어야 할 듯  -->
+        {{ rating|star_rating }}
+    </div>
     </div>
 
     <div class="content">
@@ -36,10 +40,18 @@
           {% if caffe.image3 %}
             <img class="full hidden" src="{{ caffe.image3.url }}">
           {% endif %}
+          {% if caffe.image4 %}
+            <img class="full hidden" src="{{ caffe.image4.url }}">
+          {% endif %}
+          {% if caffe.image5 %}
+            <img class="full hidden" src="{{ caffe.image5.url }}">
+          {% endif %}
           <img class="carousel-button prev" src="{% static 'coplate/icons/ic-prev.svg' %}">
           <img class="carousel-button next" src="{% static 'coplate/icons/ic-next.svg' %}">
         </div>
       </div>
+    </div>
+    
       <!-- <div class="thumbnails">
         <img class="thumb" src="{{ review.image1.url }}" data-index="0">
         {% if review.image2 %}

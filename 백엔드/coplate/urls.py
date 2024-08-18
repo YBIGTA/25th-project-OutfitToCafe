@@ -9,13 +9,13 @@ urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('account_login'), permanent=False)), # 처음 페이지를 로그인 화면으로 바꾸기 
     # review
     path('index', views.IndexView.as_view(), name='index'),
-    path('caffe/', views.CaffeListView.as_view(), name='caffe-list'),
-    path('caffe/<int:caffe_id>/', views.CaffeDetailView.as_view(), name='caffe-detail'),
-    path('caffe/new/', views.CaffeCreateView.as_view(), name='caffe-create'),
-    path('caffe/<int:review_id>/edit/', views.CaffeUpdateView.as_view(), name='caffe-update'),
-    path('search/',views.SearchView.as_view(), name='search'),
-    path('caffe/<int:caffe_id>/delete/', views.CaffeDeleteView.as_view(), name='caffe-delete'),
-    path('caffe/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
+    path('style_caffe/', views.Style_CaffeListView.as_view(), name='style-caffe-list'),
+    path('style_caffe/<int:caffe_id>/', views.CaffeDetailView.as_view(), name='style-caffe-detail'),
+    path('style_caffe/new/', views.CaffeCreateView.as_view(), name='caffe-create'),
+    path('style_caffe/<int:review_id>/edit/', views.CaffeUpdateView.as_view(), name='style-caffe-update'),
+    path('style_search/',views.SearchView.as_view(), name='search'),
+    path('style_caffe/<int:caffe_id>/delete/', views.CaffeDeleteView.as_view(), name='style-caffe-delete'),
+    path('style_caffe/following/', views.FollowingReviewListView.as_view(), name='style-following-review-list'),
    
     # profile
     path('users/<int:user_id>/', views.ProfileView.as_view(), name='profile'),
@@ -24,22 +24,25 @@ urlpatterns = [
     path('edit-profile/', views.ProfileUpdateView.as_view(), name='profile-update'),
 
     # dripshot
-    path('dripshot/',views.DripshotsListView.as_view(),name='clothes-list'),
-    path('drip_shot/list/',views.DripshotsMainListView.as_view(),name='clothes-main-list'), # 여기까지 만듬 
-    path('caffes/<int:caffe_id>/', views.ReviewDetailView.as_view(), name='dripshot-detail'),
-    path('caffes/new/', views.ReviewCreateView.as_view(), name='dripshot-create'),
-    path('caffes/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='dripshot-update'),
-    path('caffes/<int:caffe_id>/delete/', views.ReviewDeleteView.as_view(), name='dripshot-delete'),
+    path('dripshot/',views.DripshotListView.as_view(),name='clothes-list'),
+    path('drip_shot/list/',views.DripshotMainListView.as_view(),name='clothes-main-list'), # 여기까지 만듬 
+    path('caffes/<int:caffe_id>/', views.DripshotDetailView.as_view(), name='dripshot-detail'),
+    path('caffes/new/', views.DripshotCreateView.as_view(), name='dripshot-create'),
+    path('caffes/<int:review_id>/edit/', views.DripshotUpdateView.as_view(), name='dripshot-update'),
+    path('caffes/<int:caffe_id>/delete/', views.DripshotDeleteView.as_view(), name='dripshot-delete'),
     path('caffes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
 
     # around 
     path('around/',views.CaffeAroundListView.as_view(),name='around-list'), 
     path('around/list',views.CaffeAroundMainListView.as_view(),name='around-main-list'),
-    path('caffes/<int:caffe_id>/', views.ReviewDetailView.as_view(), name='around-detail'),
-    path('caffes/new/', views.ReviewCreateView.as_view(), name='around-create'),
-    path('caffes/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='around-update'),
-    path('caffes/<int:caffe_id>/delete/', views.ReviewDeleteView.as_view(), name='around-delete'),
+    # path('caffes/<int:caffe_id>/', views.ReviewDetailView.as_view(), name='around-detail'),
+    # path('caffes/new/', views.ReviewCreateView.as_view(), name='around-create'),
+    # path('caffes/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='around-update'),
+    # path('caffes/<int:caffe_id>/delete/', views.ReviewDeleteView.as_view(), name='around-delete'),
     path('caffes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
+
+    #js
+    path('caffe-autocomplete/',views.CaffeAutocomplete.as_view(), name='caffe-autocomplete'),
 
 
     # comment

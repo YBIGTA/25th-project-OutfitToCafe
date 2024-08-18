@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block title %}
-{% if review %}{{ review.title }}{% else %}새 리뷰 작성{% endif %} | Coplate
+{% if dripshot %}{{ dripshot.title }}{% else %}새 리뷰 작성{% endif %} | Drip-Shot
 {% endblock title %}
 
 {% block content %}
@@ -16,19 +16,26 @@
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
-    <div class="restaurant-name">
-      {{ form.restaurant_name|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:카페 (검색할 수 있게) 이름" }}
-      {% for error in form.restaurant_name.errors %}
+    <div class="caffe-autocomplete">
+      {{ form.caffe|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:카페를 선택해주세요" }}
+      {% for error in form.caffe.errors %}
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
-    <div class="restaurant-link">
-      {{ form.restaurant_link|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:네이버 또는 카카오 플레이스 주소" }}
-      {% for error in form.restaurant_link.errors %}
+    <div class="content">
+      {{ form.content|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:" }}
+      {% for error in form.content.errors %}
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
-    <div class="rating">
+    <div class="style_keywords">
+      <label for="id_style_keywords">3개의 스타일을 선택해주세요:</label>
+      {{ form.style_keywords|add_class:"cp-input"|add_error_class:"error" }}
+      {% for error in form.style_keywords.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <!-- <div class="rating">
       <div class="cp-stars">
         {% for radio in form.rating %}
           {{ radio }}
@@ -37,17 +44,11 @@
       {% for error in form.rating.errors %}
         <div class="error-message">{{ error }}</div>
       {% endfor %}
-    </div>
-    <div class="content">
-      {{ form.content|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:리뷰를 작성해 주세요." }}
-      {% for error in form.title.errors %}
-        <div class="error-message">{{ error }}</div>
-      {% endfor %}
-    </div>
+    </div> -->
 		<div class="file">
       <div class="file-content">
-        {% if review.image1 %}
-          <img src="{{ review.image1.url }}">
+        {% if dripshot.image1 %}
+          <img src="{{ dripshot.image1.url }}">
         {% endif %}
         <div>  
           {{ form.image1 }}
@@ -59,8 +60,8 @@
     </div>
     <div class="file">
       <div class="file-content">
-        {% if review.image2 %}
-          <img src="{{ review.image2.url }}">
+        {% if dripshot.image2 %}
+          <img src="{{ dripshot.image2.url }}">
         {% endif %}
         <div>
           {{ form.image2 }}
@@ -72,12 +73,38 @@
     </div>
     <div class="file">
       <div class="file-content">
-        {% if review.image3 %}
-          <img src="{{ review.image3.url }}">
+        {% if dripshot.image3 %}
+          <img src="{{ dripshot.image3.url }}">
         {% endif %}
         <div>
           {{ form.image3 }}
           {% for error in form.image3.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="file">
+      <div class="file-content">
+        {% if dripshot.image4 %}
+          <img src="{{ dripshot.image4.url }}">
+        {% endif %}
+        <div>
+          {{ form.image4 }}
+          {% for error in form.image4.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="file">
+      <div class="file-content">
+        {% if dripshot.image5 %}
+          <img src="{{ dripshot.image5.url }}">
+        {% endif %}
+        <div>
+          {{ form.image5 }}
+          {% for error in form.image5.errors %}
             <div class="error-message">{{ error }}</div>
           {% endfor %}
         </div>
@@ -96,3 +123,18 @@
   </form>
 </main>
 {% endblock content %}
+
+{% block js %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#caffe-autocomplete').autocomplete({
+      source: "{% url 'caffe-autocomplete' %}",  // 여기서 커스텀 URL을 통해 카페 리스트를 불러옵니다.
+      minLength: 2,  // 최소 2글자 입력 시 검색 시작
+      select: function(event, ui) {
+        $(this).val(ui.item.label);
+      }
+    });
+  });
+</script>
+{% endblock js %}
