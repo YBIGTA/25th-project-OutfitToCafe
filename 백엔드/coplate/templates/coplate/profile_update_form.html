@@ -20,12 +20,27 @@
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
-    <div class="content">
-      {{ form.intro|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:자신을 소개해 주세요!" }}
-      {% for error in form.intro.errors %}
+    <div class="recommend_location">
+      {{ form.recommend_location|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:역이름" }}
+      {% for error in form.recommend_location.errors %}
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
+    
+    <div class="style_keywords">
+      <ul>
+          {% for checkbox in form.style_keywords %}
+              <li>
+                  {{ checkbox.tag }}
+                  <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+              </li>
+          {% endfor %}
+      </ul>
+      {% for error in form.style_keywords.errors %}
+          <div class="error-message">{{ error }}</div>
+      {% endfor %}
+  </div>
+  
     <div class="buttons">
       <a class="cp-button secondary cancel" href="{% url 'profile' user.id %}">취소</a>
       <button class="cp-button" type="submit">완료</button>
@@ -33,3 +48,24 @@
   </form>
 </main>
 {% endblock content %}
+{% block js %}
+<script>
+  // 최대 선택 가능한 체크박스 수
+  const maxSelection = 3;
+
+  // 모든 체크박스 요소 가져오기
+  const checkboxes = document.querySelectorAll('.style_keywords input[type="checkbox"]');
+
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const checkedCount = document.querySelectorAll('.style_keywords input[type="checkbox"]:checked').length;
+
+      // 선택된 체크박스 수가 최대치를 넘으면, 체크 해제 처리
+      if (checkedCount > maxSelection) {
+        checkbox.checked = false;
+        alert(`최대 ${maxSelection}개의 스타일만 선택할 수 있습니다.`);
+      }
+    });
+  });
+</script>
+{% endblock js %}

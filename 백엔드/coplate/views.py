@@ -22,13 +22,17 @@ from .forms import *
 from django.db.models import Q,Count
 from django.http import JsonResponse
 
-class CafeAutocomplete(View):
-    def get(self, request, *args, **kwargs):
-        if 'term' in request.GET:
-            qs = Cafe.objects.filter(name__icontains=request.GET.get('term'))
-            names = list(qs.values_list('name', flat=True))
-            return JsonResponse(names, safe=False)
-        return JsonResponse([], safe=False)
+
+def cafe_autocomplete(request):
+    if 'term' in request.GET:
+        # 입력된 term 값으로 카페 이름을 검색합니다.
+        qs = Cafe.objects.filter(name__icontains=request.GET.get('term'))
+        # 검색 결과에서 이름만 추출하여 리스트로 만듭니다.
+        names = list(qs.values_list('name', flat=True))
+        # JSON 형식으로 반환합니다.
+        return JsonResponse(names, safe=False)
+    return JsonResponse([], safe=False)
+
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -63,15 +67,15 @@ class IndexView(View):
 
             # 사용자의 추천 위치와 일치하는 주변 카페 필터링
             if user.recommend_location:
-                nearby_cafes = Cafe.objects.filter(location__icontains=user.recommend_location)
+                nearby_cafes = Cafe.objects.filter(address__icontains=user.recommend_location)
                 context['nearby_cafes'] = nearby_cafes
         
         return render(request, 'coplate/index.html', context)
     
 class FollowingReviewListView(LoginRequiredMixin, ListView):
     model = Cafe
-    context_object_name = 'following_reviews'
-    template_name = 'coplate/following_review_list.html'
+    context_object_name = 'following_cafe'
+    template_name = 'coplate/following_cafe_list.html'
     paginate_by = 8
 
     def get_queryset(self):
@@ -88,8 +92,8 @@ class SearchView(ListView):
     def get_queryset(self): # listview에서 보여줄 객체의 리스트를 반환하는 역할 
         query = self.request.GET.get('query','')
         return Cafe.objects.filter(
-            Q(title__icontains=query) # icontains > 대소문자 구분없이 
-            | Q(restaurant_name__icontains=query)
+            Q(name__icontains=query) # icontains > 대소문자 구분없이 
+            | Q(address__icontains=query)
             | Q(content__icontains=query)
         )
     
@@ -260,7 +264,7 @@ class CafeAroundListView(ListView): # index 파일에 보이는거
         user = self.request.user
         if user.is_authenticated and user.recommend_location:
             recommend_location = user.recommend_location
-            return Cafe.objects.filter(location__icontains=recommend_location)
+            return Cafe.objects.filter(address__icontains=recommend_location)
         else:
             return Cafe.objects.none()  # 추천 장소가 없으면 빈 쿼리셋 반환
         
@@ -274,7 +278,7 @@ class CafeAroundMainListView(ListView):# 더보기 누르고 보이는 거
         user = self.request.user
         if user.is_authenticated and user.recommend_location:
             recommend_location = user.recommend_location
-            return Cafe.objects.filter(location__icontains=recommend_location)
+            return Cafe.objects.filter(address__icontains=recommend_location)
         else:
             return Cafe.objects.none()  # 추천 장소가 없으면 빈 쿼리셋 반환
 
@@ -488,8 +492,8 @@ class ProcessFollowView(LoginAndverificationRequiredMixin, View):
 
 class UserReviewListView(ListView):
     model = Cafe
-    template_name = 'coplate/user_review_list.html'
-    context_object_name = 'user_reviews'
+    template_name = 'coplate/user_cafe_list.html'
+    context_object_name = 'user_cafe'
     paginate_by = 4
 
     def get_queryset(self):

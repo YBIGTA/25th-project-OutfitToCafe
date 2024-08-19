@@ -1126,3 +1126,49 @@ a.like-button:hover {
   margin-left: 8px;
   font-size: 17px;
 }
+/* 부모 컨테이너에 대한 스타일 */
+.account-background, .profile-form {
+  max-height: none;
+  overflow: visible;
+  height: auto;
+}
+
+/* 부모 컨테이너에 대한 스타일 */
+.profile-form {
+  max-height: none; /* 높이 제한 해제 */
+  overflow: visible; /* 오버플로우 해제 */
+  height: auto; /* 자동 높이 설정 */
+}
+
+/* style_keywords에 대한 스타일 */
+.style_keywords {
+  max-height: none; /* 높이 제한 해제 */
+  overflow: visible; /* 모든 내용이 보이도록 설정 */
+  height: auto; /* 자동 높이 설정 */
+}
+
+/* 체크박스 목록에 대한 스타일 */
+.style_keywords ul {
+  padding: 0;
+  margin: 0;
+  list-style: none; /* 기본 목록 스타일 제거 */
+}
+
+/* 체크박스 항목에 대한 스타일 */
+.style_keywords li {
+  margin-bottom: 5px; /* 각 항목 사이에 간격 추가 */
+  display: flex; /* 체크박스와 레이블을 한 줄로 배치 */
+  align-items: center; /* 체크박스와 레이블을 수직 가운데 정렬 */
+}
+
+/* 체크박스와 레이블 사이 간격 */
+.style_keywords input[type="checkbox"] {
+  margin-right: 10px; /* 체크박스와 레이블 사이 간격 추가 */
+}
+
+/* 에러 메시지에 대한 스타일 */
+.error-message {
+  color: #d9534f; /* 에러 메시지 색상 설정 */
+  font-size: 12px;
+  margin-top: 5px;
+}

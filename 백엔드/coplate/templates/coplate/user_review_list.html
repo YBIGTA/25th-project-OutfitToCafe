@@ -9,7 +9,7 @@
     <div class="header">
       <h2>{{ profile_user.name }}님의 리뷰 ({{ paginator.count }})</h2>
     </div>
-    {% include "components/review_list.html" with reviews=user_reviews empty_message="아직 리뷰가 없어요:(" %}
+    {% include "components/cafe_list.html" with cafe=user_cafe empty_message="아직 리뷰가 없어요:(" %}
 
     
     <div class="wrap-pagination">    

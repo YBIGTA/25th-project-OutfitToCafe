@@ -1,0 +1,86 @@
+[
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 1,
+        "fields": {
+            "keyword": "Casual"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 2,
+        "fields": {
+            "keyword": "Formal"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 3,
+        "fields": {
+            "keyword": "Sporty"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 4,
+        "fields": {
+            "keyword": "Elegant"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 5,
+        "fields": {
+            "keyword": "Vintage"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 6,
+        "fields": {
+            "keyword": "Chic"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 7,
+        "fields": {
+            "keyword": "Bohemian"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 8,
+        "fields": {
+            "keyword": "Preppy"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 9,
+        "fields": {
+            "keyword": "Streetwear"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 10,
+        "fields": {
+            "keyword": "Minimalist"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 11,
+        "fields": {
+            "keyword": "Grunge"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 12,
+        "fields": {
+            "keyword": "Classic"
+        }
+    }
+]

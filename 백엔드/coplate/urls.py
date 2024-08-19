@@ -42,7 +42,7 @@ urlpatterns = [
     path('cafes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
 
     #js
-    path('cafe-autocomplete/',views.CafeAutocomplete.as_view(), name='cafe-autocomplete'),
+    path('cafe-autocomplete/', views.cafe_autocomplete, name='cafe-autocomplete'),
 
 
     # comment
