@@ -1,0 +1,130 @@
+{% extends "coplate_base/base_with_navbar.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+{% if cafe %}{{ cafe.name }}{% else %}새 리뷰 작성{% endif %} | Drip-Shot
+{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <form class="review-form max-content-width" method="post" autocomplete="off" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="name">
+      {{ form.name|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:카페명" }}
+      {% for error in form.cafe.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="restaurant-name">
+      {{ form.address|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:주소" }}
+      {% for error in form.address.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="restaurant-link">
+      {{ form.address_url|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:주소 url" }}
+      {% for error in form.address_url.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="restaurant-link">
+      {{ form.sns_link|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:인스타 url" }}
+      {% for error in form.sns_link.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <!-- <div class="rating">
+      <div class="cp-stars">
+        {% for radio in form.rating %}
+          {{ radio }}
+        {% endfor %}
+      </div>
+      {% for error in form.rating.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div> -->
+    <div class="content">
+      {{ form.content|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:리뷰를 작성해 주세요." }}
+      {% for error in form.content.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    </div>
+		<div class="file">
+      <div class="file-content">
+        {% if cafe.image1 %}
+          <img src="{{ cafe.image1.url }}">
+        {% endif %}
+        <div>  
+          {{ form.image1 }}
+          {% for error in form.image1.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="file">
+      <div class="file-content">
+        {% if cafe.image2 %}
+          <img src="{{ cafe.image2.url }}">
+        {% endif %}
+        <div>
+          {{ form.image2 }}
+          {% for error in form.image2.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="file">
+      <div class="file-content">
+        {% if cafe.image3 %}
+          <img src="{{ cafe.image3.url }}">
+        {% endif %}
+        <div>
+          {{ form.image3 }}
+          {% for error in form.image3.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="file">
+      <div class="file-content">
+        {% if cafe.image4 %}
+          <img src="{{ cafe.image4.url }}">
+        {% endif %}
+        <div>
+          {{ form.image4 }}
+          {% for error in form.image4.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="file">
+      <div class="file-content">
+        {% if cafe.image5 %}
+          <img src="{{ cafe.image5.url }}">
+        {% endif %}
+        <div>
+          {{ form.image5 }}
+          {% for error in form.image5.errors %}
+            <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <a 
+        class="cp-button secondary cancel" 
+        href="{% if cafe %}{% url 'cafe-detail' cafe.id %}{% else %}{% url 'index' %}{% endif %}"
+      >
+        취소
+      </a>
+      <button class="cp-button submit" type="submit">완료</button>
+    </div>
+  </form>
+</main>
+{% endblock content %}

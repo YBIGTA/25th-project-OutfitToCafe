@@ -7,67 +7,54 @@
     <div class="fg"></div>
     <div class="content">
       <h1></h1>
-        <div class="header-search">
-          <form class="search-form" action="{% url "search" %}" method="get">
-            <input class="search-input" name="query" type="text" placeholder="식당, 음식 등을 검색해보세요" required>
-            <button class="cp-button search-button" type="submit">검색</button>
+      <div class="header-search">
+        <form class="search-form" action="{% url 'search' %}" method="get">
+          <input class="search-input" name="query" type="text" placeholder="식당, 음식 등을 검색해보세요" required>
+          <button class="cp-button search-button" type="submit">검색</button>
 
-        <button type="button" class="search-image-button" style="margin-left: 10px; background: none; border: none; cursor: pointer;">
-          <img src="{% static 'path/to/your/image.jpg' %}" alt="Search Image" style="height: 40px; width: 40px; border-radius: 50%;">
-        </button> {% endcomment %}
-          </form>
-        </div>
-        <div class="keyword-list">
-          {% for keyword in caffe_keywords %}
-            <a href="{% url 'search' %}?query={{ keyword }}" class="cp-chip-keyword green">{{ keyword }}</a>
-          {% endfor %}
-        </div>
+          <button type="button" class="search-image-button" style="margin-left: 10px; background: none; border: none; cursor: pointer;">
+            <img src="{% static 'path/to/your/image.jpg' %}" alt="Search Image" style="height: 40px; width: 40px; border-radius: 50%;">
+          </button>
+        </form>
+      </div>
+      <div class="keyword-list">
+        {% for keyword in cafe_keywords %}
+          <a href="{% url 'search' %}?query={{ keyword }}" class="cp-chip-keyword green">{{ keyword }}</a>
+        {% endfor %}
+      </div>
     </div>
   </div>
+
   <div class="content-list max-content-width">
     <div class="header">
       <h2>오늘의 드립샷</h2>
-      <a class="cp-ic-button circle newreview" href="{% url 'clothes-main-list' %}" data-login-required >더보기</a>
+      <a class="cp-ic-button circle newreview" href="{% url 'dripshot-main-list' %}" data-login-required>더보기</a>
     </div>
-    <!-- 여기서는 오브젝트 사용할 수 있고 전체 데이터에 대한 > 그리고 자세한거는 with으로 넘긴다  -->
-    {% include "components/clothes_list.html" with drip_shots=drip_shot_review empty_message="아직 리뷰가 없어요:(" %}
-    {% if latest_reviews%}
-    {%endif%}
+    {% include "components/dripshot_list.html" with drip_shots=drip_shot_review empty_message="아직 리뷰가 없어요:(" %}
+    {% if latest_reviews %}
+      <!-- Add content here if there are latest_reviews -->
+    {% endif %}
   </div>
 
   <div class="content-list max-content-width">
     <div class="header">
       <h2>내 스타일 카페는?</h2>
-      <a class="cp-ic-button circle newreview" href="{% url 'review-list' %}" data-login-required >더보기</a>
+      <a class="cp-ic-button circle newreview" href="{% url 'style-cafe-list' %}" data-login-required>더보기</a>
     </div>
-    {% include "components/style_caffe_list.html" with style_caffe=style_caffe empty_message="아직 리뷰가 없어요:(" %}
-    <!-- {% if matching_caffes %}
-        {% for caffe in matching_caffes %}
-            <div class="caffe-item"><h3>{{ caffe.name }}</h3><p>{{ caffe.location }}</p><!-- 추가적으로 보여주고 싶은 정보들 --></div>
-       
+    {% include "components/style_cafe_list.html" with style_cafe=style_cafe empty_message="아직 리뷰가 없어요:(" %}
   </div>
-  
+
   <div class="content-list max-content-width">
     <div class="header">
       <h2>내 주변 카페</h2>
-      <a class="cp-ic-button circle newreview" href="{% url 'caffe-list' %}" data-login-required >더보기</a>
-    </div> 
-     <!-- # url review-list 좀 변경해줘야 할 듯  -->
-    {% include "components/around_list.html" with caffes=caffes empty_message="아직 리뷰가 없어요:(" %}
-    <!-- {% if nearby_caffes %}
-        {% for caffe in nearby_caffes %}
-            <div class="caffe-item"><h3>{{ caffe.name }}</h3><p>{{ caffe.location }}</p><!-- 추가적으로 보여주고 싶은 정보들 --></div>
-        <!-- {% endfor %} -->
-    <!-- {% else %}
-        <p>내 주변에 카페가 없어요.</p>
-    {% endif %} --> 
-  </div>
-  
-</main>
+      <a class="cp-ic-button circle newreview" href="{% url 'around-list' %}" data-login-required>더보기</a>
+    </div>
+    {% include "components/around_list.html" with cafes=cafes empty_message="아직 리뷰가 없어요:(" %}
+  </div></main>
 {% endblock content %}
+
 {% block js %}
 <script>
-  const isAuthenticated= '{{user.is_authenticated}}' === 'True';
-</script>
-<script src="{% static 'coplate/js/auth.js'%}"></script>
+  const isAuthenticated = '{{user.is_authenticated}}' === 'True';
+</script><script src="{% static 'coplate/js/auth.js' %}"></script>
 {% endblock js %}

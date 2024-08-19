@@ -14,7 +14,7 @@
           {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}">관리자</a></li>
           {% endif %}
-          <li><a href="{% url 'review-create' %}">만들기</a></li>
+          <li><a href="{% url 'cafe-create' %}">만들기</a></li>
           <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
           <li><a href="{% url 'account_logout' %}">로그아웃</a></li>
         {% else %}
@@ -31,7 +31,7 @@
 <footer class="site-footer">
   <div class="max-content-width content">
     <div></div>
-    <div>caffe</div>
+    <div>cafe</div>
   </div>
 </footer>
 {% endblock footer %}

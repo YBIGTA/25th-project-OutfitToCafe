@@ -4,7 +4,7 @@ from .models import *
 
 
 class DripshotForm(forms.ModelForm):
-    caffe = forms.CharField(label='Caffe', widget=forms.TextInput(attrs={'id': 'caffe-autocomplete'}))
+    cafe = forms.CharField(label='Cafe', widget=forms.TextInput(attrs={'id': 'cafe-autocomplete'}))
 
     class Meta:
         model = Dripshot
@@ -17,7 +17,7 @@ class DripshotForm(forms.ModelForm):
             'image5',
             'style_keywords',
             'content',
-            'caffe',
+            'cafe',
         ]
         widgets = {
             'style_keywords': forms.CheckboxSelectMultiple(),
@@ -28,20 +28,20 @@ class DripshotForm(forms.ModelForm):
         # 첫 3개의 스타일 키워드만 선택 가능하도록 제한
         self.fields['style_keywords'].queryset = StyleKeyword.objects.all()[:3]
 
-class CaffeForm(forms.ModelForm): # 카페 추가 창 만들때 사용하는거
+class CafeForm(forms.ModelForm): # 카페 추가 창 만들때 사용하는거
     class Meta:
-        model = Caffe
+        model = Cafe
         fields = [
             'name',
-            'location',
-            'location_url',
-            'instagram_url',
+            'address',
+            'address_url',
+            'sns_link',
             'image1',
             'image2',
             'image3',
             'image4',
             'image5',
-            'style_keyword',
+            'style_keywords',
             'content',
         ]
 class ProfileForm(forms.ModelForm):

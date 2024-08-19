@@ -18,7 +18,7 @@ follower_list.html
         {% for u in followers %}
           <a class="follow-list-row" href="{% url 'profile' u.id %}">
             <div class="cp-avatar medium" style="background-image: url('{{ u.profile_pic.url }}')"></div>
-            <span class="nickname">{{ u.nickname }}</span>
+            <span class="nickname">{{ u.name }}</span>
           </a>
         {% endfor %}
       </div>

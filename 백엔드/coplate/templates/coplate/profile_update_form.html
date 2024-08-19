@@ -15,8 +15,8 @@
       </div>
     </div>
     <div class="nickname">
-      {{ form.nickname|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:닉네임" }}
-      {% for error in form.nickname.errors %}
+      {{ form.name|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:닉네임" }}
+      {% for error in form.name.errors %}
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>

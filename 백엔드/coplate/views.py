@@ -22,10 +22,10 @@ from .forms import *
 from django.db.models import Q,Count
 from django.http import JsonResponse
 
-class CaffeAutocomplete(View):
+class CafeAutocomplete(View):
     def get(self, request, *args, **kwargs):
         if 'term' in request.GET:
-            qs = Caffe.objects.filter(name__icontains=request.GET.get('term'))
+            qs = Cafe.objects.filter(name__icontains=request.GET.get('term'))
             names = list(qs.values_list('name', flat=True))
             return JsonResponse(names, safe=False)
         return JsonResponse([], safe=False)
@@ -37,7 +37,7 @@ class IndexView(View):
         context['drip_shot_review'] = Dripshot.objects.all()[0:20]
 
         # 키워드 빈도순으로 가져오기
-        context['caffe_keywords'] = Caffe.objects.values_list('caffe_keywords', flat=True).distinct()[:9]
+        context['cafe_keywords'] = Cafe.objects.values_list('cafe_keywords', flat=True).distinct()[:9]
 
         # 현재 로그인한 사용자
         user = self.request.user
@@ -52,42 +52,42 @@ class IndexView(View):
                 query |= Q(style_keywords=keyword)
             
             # 2개 이상의 키워드가 일치하는 카페 필터링
-            matching_caffes = Caffe.objects.filter(query).annotate(
+            matching_cafes = Cafe.objects.filter(query).annotate(
                 matching_keywords_count=Count('style_keywords')
             ).filter(matching_keywords_count__gte=2).distinct()
 
-            context['matching_caffes'] = matching_caffes
+            context['matching_cafes'] = matching_cafes
 
             # 사용자가 팔로우한 작성자의 최신 리뷰 가져오기
-            context['latest_following_reviews'] = Caffe.objects.filter(author__followers=user)[:4]
+            context['latest_following_reviews'] = Cafe.objects.filter(author__followers=user)[:4]
 
             # 사용자의 추천 위치와 일치하는 주변 카페 필터링
             if user.recommend_location:
-                nearby_caffes = Caffe.objects.filter(location__icontains=user.recommend_location)
-                context['nearby_caffes'] = nearby_caffes
+                nearby_cafes = Cafe.objects.filter(location__icontains=user.recommend_location)
+                context['nearby_cafes'] = nearby_cafes
         
         return render(request, 'coplate/index.html', context)
     
 class FollowingReviewListView(LoginRequiredMixin, ListView):
-    model = Caffe
+    model = Cafe
     context_object_name = 'following_reviews'
     template_name = 'coplate/following_review_list.html'
     paginate_by = 8
 
     def get_queryset(self):
-        return Caffe.objects.filter(author__followers=self.request.user)
+        return Cafe.objects.filter(author__followers=self.request.user)
 
 
 
 class SearchView(ListView):
-    model = Caffe
+    model = Cafe
     context_object_name = 'search_results' # 해당 템플릿에서 search_results로 사용가능 
     template_name = 'coplate/search_result.html'
     paginate_by = 8 
 
     def get_queryset(self): # listview에서 보여줄 객체의 리스트를 반환하는 역할 
         query = self.request.GET.get('query','')
-        return Caffe.objects.filter(
+        return Cafe.objects.filter(
             Q(title__icontains=query) # icontains > 대소문자 구분없이 
             | Q(restaurant_name__icontains=query)
             | Q(content__icontains=query)
@@ -98,10 +98,10 @@ class SearchView(ListView):
         context['query'] = self.request.GET.get('query','')
         return context 
 
-class Style_CaffeListView(ListView):
-    model = Caffe
-    context_object_name = 'style_caffe'
-    template_name = 'coplate/style_caffe_list.html'
+class Style_CafeListView(ListView):
+    model = Cafe
+    context_object_name = 'style_cafe'
+    template_name = 'coplate/style_cafe_list.html'
     paginate_by = 12
 
     def get_queryset(self):
@@ -116,12 +116,12 @@ class Style_CaffeListView(ListView):
             query |= Q(style_keywords=keyword)
 
         # 사용자의 스타일 키워드 중 하나라도 일치하는 카페를 반환
-        return Caffe.objects.filter(query).distinct()
+        return Cafe.objects.filter(query).distinct()
 
-class Style_CaffeMainListView(ListView):
-    model = Caffe
-    context_object_name = 'style_caffe'
-    template_name = 'coplate/style_caffe_main_list.html'
+class Style_CafeMainListView(ListView):
+    model = Cafe
+    context_object_name = 'style_cafe'
+    template_name = 'coplate/style_cafe_main_list.html'
     paginate_by = 12
 
     def get_queryset(self):
@@ -136,31 +136,31 @@ class Style_CaffeMainListView(ListView):
             query |= Q(style_keywords=keyword)
 
         # 사용자의 스타일 키워드 중 하나라도 일치하는 카페를 반환
-        return Caffe.objects.filter(query).distinct()
+        return Cafe.objects.filter(query).distinct()
 
 
-class CaffeDetailView(DetailView): 
-    model = Caffe
-    template_name = 'coplate/caffe_detail.html'
-    pk_url_kwarg = 'caffe_id'
+class CafeDetailView(DetailView): 
+    model = Cafe
+    template_name = 'coplate/cafe_detail.html'
+    pk_url_kwarg = 'cafe_id'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
-        context['caffe_ctype_id'] = ContentType.objects.get(model='caffe').id
+        context['cafe_ctype_id'] = ContentType.objects.get(model='cafe').id
         context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
 
         user = self.request.user
         if user.is_authenticated:
-            caffe = self.object
-            context['likes_caffe'] = Like.objects.filter(user=user, content_type=context['caffe_ctype_id'], object_id=caffe.id).exists()
-            context['liked_comments'] = Comment.objects.filter(caffe=caffe).filter(likes__user=user)
+            cafe = self.object
+            context['likes_cafe'] = Like.objects.filter(user=user, content_type=context['cafe_ctype_id'], object_id=cafe.id).exists()
+            context['liked_comments'] = Comment.objects.filter(cafe=cafe).filter(likes__user=user)
 
         return context
 
-class CaffeListView(ListView):
-    model = Caffe
-    context_object_name = 'caffe'
-    template_name = 'coplate/caffe_list.html'
+class CafeListView(ListView):
+    model = Cafe
+    context_object_name = 'cafe'
+    template_name = 'coplate/cafe_list.html'
     paginate_by = 12
 
 
@@ -229,8 +229,8 @@ class DripshotDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
         return reverse('index') 
 
     def test_func(self, user):
-        caffe = self.get_object()
-        return caffe.author == user
+        cafe = self.get_object()
+        return cafe.author == user
 
     
 class DripshotUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
@@ -246,12 +246,12 @@ class DripshotUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
         return reverse('dripshot-detail', kwargs={'dripshot_id': self.object.id})
 
     def test_func(self, user):
-        caffe = self.get_object()
-        return caffe.author == user 
+        cafe = self.get_object()
+        return cafe.author == user 
 
 
-class CaffeAroundListView(ListView): # index 파일에 보이는거
-    model = Caffe
+class CafeAroundListView(ListView): # index 파일에 보이는거
+    model = Cafe
     context_object_name = 'caffes'
     template_name = 'coplate/around_list.html'
     paginate_by = 12
@@ -260,13 +260,13 @@ class CaffeAroundListView(ListView): # index 파일에 보이는거
         user = self.request.user
         if user.is_authenticated and user.recommend_location:
             recommend_location = user.recommend_location
-            return Caffe.objects.filter(location__icontains=recommend_location)
+            return Cafe.objects.filter(location__icontains=recommend_location)
         else:
-            return Caffe.objects.none()  # 추천 장소가 없으면 빈 쿼리셋 반환
+            return Cafe.objects.none()  # 추천 장소가 없으면 빈 쿼리셋 반환
         
-class CaffeAroundMainListView(ListView):# 더보기 누르고 보이는 거 
-    model = Caffe
-    context_object_name = 'caffes'
+class CafeAroundMainListView(ListView):# 더보기 누르고 보이는 거 
+    model = Cafe
+    context_object_name = 'cafes'
     template_name = 'coplate/around_main_list.html'
     paginate_by = 12
 
@@ -274,15 +274,15 @@ class CaffeAroundMainListView(ListView):# 더보기 누르고 보이는 거
         user = self.request.user
         if user.is_authenticated and user.recommend_location:
             recommend_location = user.recommend_location
-            return Caffe.objects.filter(location__icontains=recommend_location)
+            return Cafe.objects.filter(location__icontains=recommend_location)
         else:
-            return Caffe.objects.none()  # 추천 장소가 없으면 빈 쿼리셋 반환
+            return Cafe.objects.none()  # 추천 장소가 없으면 빈 쿼리셋 반환
 
 
-class CaffeCreateView(LoginAndverificationRequiredMixin, CreateView):
-    model = Caffe
-    form_class = CaffeForm
-    template_name = 'coplate/caffe_form.html'
+class CafeCreateView(LoginAndverificationRequiredMixin, CreateView):
+    model = Cafe
+    form_class = CafeForm
+    template_name = 'coplate/cafe_form.html'
     # 버튼을 클릭하면 이 url로 가고 성공하면 밑에 url로 감 
     # form_valid 는 폼이 유효하면 실행됨 
     def form_valid(self, form):
@@ -301,23 +301,23 @@ class CaffeCreateView(LoginAndverificationRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('caffe-detail', kwargs={'caffe_id': self.object.id})
+        return reverse('cafe-detail', kwargs={'cafe_id': self.object.id})
         
-class CaffeDetailView(DetailView):
-    model = Caffe
-    template_name = 'coplate/caffe_detail.html'
-    pk_url_kwarg = 'caffe_id'
+class CafeDetailView(DetailView):
+    model = Cafe
+    template_name = 'coplate/cafe_detail.html'
+    pk_url_kwarg = 'cafe_id'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
-        context['caffe_ctype_id'] = ContentType.objects.get(model='caffe').id
+        context['cafe_ctype_id'] = ContentType.objects.get(model='cafe').id
         context['comment_ctype_id'] = ContentType.objects.get(model='comment').id
 
         user = self.request.user
         if user.is_authenticated:
-            caffe = self.object
-            context['likes_caffe'] = Like.objects.filter(user=user, content_type=context['caffe_ctype_id'], object_id=caffe.id).exists()
-            context['liked_comments'] = Comment.objects.filter(caffe=caffe).filter(likes__user=user)
+            cafe = self.object
+            context['likes_cafe'] = Like.objects.filter(user=user, content_type=context['cafe_ctype_id'], object_id=cafe.id).exists()
+            context['liked_comments'] = Comment.objects.filter(cafe=cafe).filter(likes__user=user)
 
         return context
 
@@ -372,34 +372,34 @@ class CaffeDetailView(DetailView):
 #         return context
 
 
-class CaffeDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
-    model = Caffe
-    template_name = 'coplate/caffe_confirm_delete.html'
-    pk_url_kwarg = 'caffe_id'
+class CafeDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
+    model = Cafe
+    template_name = 'coplate/cafe_confirm_delete.html'
+    pk_url_kwarg = 'cafe_id'
 
     def get_success_url(self):
         return reverse('index') 
 
     def test_func(self, user):
-        caffe = self.get_object()
-        return caffe.author == user
+        cafe = self.get_object()
+        return cafe.author == user
 
     
-class CaffeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
-    model = Caffe
-    form_class = CaffeForm
-    template_name = 'coplate/caffe_form.html'
-    pk_url_kwarg = 'caffe_id'
+class CafeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
+    model = Cafe
+    form_class = CafeForm
+    template_name = 'coplate/cafe_form.html'
+    pk_url_kwarg = 'cafe_id'
 
     redirect_unauthenticated_users = False
     raise_exception = True
 
     def get_success_url(self):
-        return reverse('caffe-detail', kwargs={'caffe_id': self.object.id})
+        return reverse('cafe-detail', kwargs={'cafe_id': self.object.id})
 
     def test_func(self, user):
-        caffe = self.get_object()
-        return caffe.author == user
+        cafe = self.get_object()
+        return cafe.author == user
 
 
 # 이미 detail 부분에 다 보내놓고 (좋아요와 댓글할 수 있는거를 ) > url설정 해 놓고 > 그 칸을 클릭하고 그 안에 값을 
@@ -414,7 +414,7 @@ class CommentCreateView(LoginAndverificationRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.review = Caffe.objects.get(id=self.kwargs.get('review_id'))
+        form.instance.review = Cafe.objects.get(id=self.kwargs.get('review_id'))
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -470,7 +470,7 @@ class ProfileView(DetailView):
         profile_user_id = self.kwargs.get('user_id')
         if user.is_authenticated :
             context['is_following']=user.following.filter(id=profile_user_id).exists()
-        context['user_reviews'] = Caffe.objects.filter(author_id=profile_user_id)[:4]
+        context['user_reviews'] = Cafe.objects.filter(author_id=profile_user_id)[:4]
         return context
 
 
@@ -487,13 +487,13 @@ class ProcessFollowView(LoginAndverificationRequiredMixin, View):
         return redirect('profile',user_id=profile_user_id)
 
 class UserReviewListView(ListView):
-    model = Caffe
+    model = Cafe
     template_name = 'coplate/user_review_list.html'
     context_object_name = 'user_reviews'
     paginate_by = 4
 
     def get_queryset(self):
-        return Caffe.objects.filter(author__id=self.kwargs.get('user_id'))
+        return Cafe.objects.filter(author__id=self.kwargs.get('user_id'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -565,10 +565,10 @@ class FollowerListView(ListView):
 
 
 
-class CaffeCreateView(LoginAndverificationRequiredMixin, CreateView):
-    model = Caffe
-    form_class = CaffeForm
-    template_name = 'coplate/review_form.html'
+class CafeCreateView(LoginAndverificationRequiredMixin, CreateView):
+    model = Cafe
+    form_class = CafeForm
+    template_name = 'coplate/cafe_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -586,34 +586,34 @@ class CaffeCreateView(LoginAndverificationRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'review_id': self.object.id})
+        return reverse('cafe-detail', kwargs={'cafe_id': self.object.id})
     
 
 
-class CaffeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
-    model = Caffe
-    form_class = CaffeForm
-    template_name = 'coplate/review_form.html'
-    pk_url_kwarg = 'review_id'
+class CafeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
+    model = Cafe
+    form_class = CafeForm
+    template_name = 'coplate/cafe_form.html'
+    pk_url_kwarg = 'cafe_id'
 
     redirect_unauthenticated_users = False
     raise_exception = True
 
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'review_id': self.object.id})
+        return reverse('cafe-detail', kwargs={'cafe_id': self.object.id})
 
     def test_func(self, user):
-        review = self.get_object()
-        return review.author == user
+        cafe = self.get_object()
+        return cafe.author == user
     
-class CaffeDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
-    model = Caffe
-    template_name = 'coplate/review_confirm_delete.html'
-    pk_url_kwarg = 'review_id'
+class CafeDeleteView(LoginAndOwnershipRequiredMixin,DeleteView):
+    model = Cafe
+    template_name = 'coplate/cafe_confirm_delete.html'
+    pk_url_kwarg = 'cafe_id'
 
     def get_success_url(self):
         return reverse('index') 
 
     def test_func(self, user):
-        review = self.get_object()
-        return review.author == user
+        cafe = self.get_object()
+        return cafe.author == user

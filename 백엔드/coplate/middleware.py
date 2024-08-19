@@ -9,7 +9,7 @@ class ProfileSetupMiddleware:
     def __call__(self, request):
         if (
             request.user.is_authenticated and             
-            not request.user.nickname and                  
+            not request.user.name and                  
             request.path_info != reverse('profile-set')    
         ):
             return redirect('profile-set')

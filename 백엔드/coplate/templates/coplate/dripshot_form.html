@@ -16,9 +16,9 @@
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
-    <div class="caffe-autocomplete">
-      {{ form.caffe|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:카페를 선택해주세요" }}
-      {% for error in form.caffe.errors %}
+    <div class="cafe-autocomplete">
+      {{ form.cafe|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:카페를 선택해주세요" }}
+      {% for error in form.cafe.errors %}
         <div class="error-message">{{ error }}</div>
       {% endfor %}
     </div>
@@ -128,8 +128,8 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#caffe-autocomplete').autocomplete({
-      source: "{% url 'caffe-autocomplete' %}",  // 여기서 커스텀 URL을 통해 카페 리스트를 불러옵니다.
+    $('#cafe-autocomplete').autocomplete({
+      source: "{% url 'cafe-autocomplete' %}",  // 여기서 커스텀 URL을 통해 카페 리스트를 불러옵니다.
       minLength: 2,  // 최소 2글자 입력 시 검색 시작
       select: function(event, ui) {
         $(this).val(ui.item.label);

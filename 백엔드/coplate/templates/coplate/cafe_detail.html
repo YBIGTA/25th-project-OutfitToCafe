@@ -1,0 +1,171 @@
+{% extends "coplate_base/base_with_navbar.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}{{ cafe.name }} | Drip-Shot{% endblock title %}
+
+{% block content %}
+<main class="site-body">
+  <article class="review-detail max-content-width">
+    <div class="review-info">
+      <div class="restaurant-name">
+        <span class="cp-chip green">{{ cafe.name }}</span>
+      </div>
+      <h1 class="title">{{ cafe.title }}</h1>
+      <a class="review-author" href="{% url 'profile' cafe.author.id %}">
+        <div class="author">
+          <div class="cp-avatar" style="background-image: url('{{ cafe.author.profile_pic.url }}')"></div>
+          <span>{{ cafe.author.name }}</span>
+        </div>
+      </a>
+      <date class="date">{{ cafe.dt_created|date:"Y년 n월 j일" }}</date>
+      <!-- <div class="review-rating">
+        <span class="cp-stars">
+          {% for i in ""|ljust:cafe.rating %}★{% endfor %}
+        </span>
+      </div> --> 
+      <div class="rating">
+        <!-- # 여기다가 추가적으로 css 넣어야 할 듯  -->
+        {{ rating|star_rating }}
+    </div>
+    </div>
+
+    <div class="content">
+      <div class="carousel">
+        <div class="images">
+          <img class="full" src="{{ cafe.image1.url }}">
+          {% if cafe.image2 %}
+            <img class="full hidden" src="{{ cafe.image2.url }}">
+          {% endif %}
+          {% if cafe.image3 %}
+            <img class="full hidden" src="{{ cafe.image3.url }}">
+          {% endif %}
+          {% if cafe.image4 %}
+            <img class="full hidden" src="{{ cafe.image4.url }}">
+          {% endif %}
+          {% if cafe.image5 %}
+            <img class="full hidden" src="{{ cafe.image5.url }}">
+          {% endif %}
+          <img class="carousel-button prev" src="{% static 'coplate/icons/ic-prev.svg' %}">
+          <img class="carousel-button next" src="{% static 'coplate/icons/ic-next.svg' %}">
+        </div>
+      </div>
+    </div>
+    
+      <!-- <div class="thumbnails">
+        <img class="thumb" src="{{ review.image1.url }}" data-index="0">
+        {% if review.image2 %}
+          <img class="thumb inactive" src="{{ review.image2.url }}" data-index="1">
+        {% endif %}
+        {% if review.image3 %}
+          <img class="thumb inactive" src="{{ review.image3.url }}" data-index="2">
+        {% endif %}
+      </div> -->
+    
+      <p class="content">{{ cafe.content|linebreaksbr }}</p>
+      <a class="location" target="_blank" href="{{ cafe.location_url }}">
+        <img class="cp-icon" src="{% static 'coplate/icons/ic-pin.svg' %}" alt="Pin Icon">
+        <span>위치보기</span>
+      </a>
+    </div>
+    <div>
+    {% for dripshot in cafe.dripshots.all %}
+      <div class="dripshot-item"><h3>{{ dripshot.title }}</h3><img src="{{ dripshot.image.url }}" alt="{{ dripshot.title }}"><p>{{ dripshot.content }}</p><p>작성자: {{ dripshot.author.username }}</p></div>
+    {% endfor %}
+    </div>
+
+    <div class="like-comment-block">
+      <div class="like-comment-header">
+        
+        <form action='{% url "process-like" cafe_ctype_id cafe.id%}' method='post'>
+          {% csrf_token %}
+          <button class="like-button" type="submit" data-login-required>
+            {% if likes_cafe %}
+            <img width="21px" src="{% static 'coplate/icons/ic-heart-orange.svg' %}" alt="filled like icon">
+            {% else %}
+            <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like icon">
+            {%endif%}
+            <span> 좋아요 {{cafe.likes.count}}</span>
+          </button>
+        </form>
+        <div class="comment-info">
+          <img src="{% static 'coplate/icons/ic-comment.svg' %}" alt="comment icon">
+          <span> 댓글 {{cafe.comments.count}}</span>
+        </div>
+      </div>
+      
+      <form class="comment-create-form" action="{% url "comment-create" cafe.id %}" method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+          {{ form.content|attr:"placeholder:댓글 내용을 입력해주세요."|add_class:"cp-input" }}
+          <button class="cp-button small" type="submit">등록</button>
+        {% else %} 
+          <a href="{% url 'account_login' %}?next={% url 'cafe-detail' cafe.id %}">
+            {{ form.content|attr:"placeholder:댓글을 작성하려면 로그인이 필요합니다."|add_class:"cp-input"|attr:"disabled" }}
+          </a>
+          <button class="cp-button small secondary" type="submit" disabled>등록</button>
+        {% endif %}
+      </form>
+
+      <div class="comment-list">
+        {% for comment in cafe.comments.all %}
+          <div class="comment">
+            <div class="comment-header">
+              <a href="{% url 'profile' comment.author.id %}">
+                <div class="author">
+                  <div class="cp-avatar" style="background-image: url('{{ comment.author.profile_pic.url }}')"></div>
+                  <span>{{ comment.author.name }}</span>
+                </div>
+              </a>
+              {% if user == comment.author %}
+                <div class="buttons">
+                  <a href="{% url "comment-delete" comment.id %}">삭제</a>
+                  <span> | </span>
+                  <a href="{% url "comment-update" comment.id %}">수정</a>
+                </div>
+              {% endif %}
+            </div>
+            <div class="comment-content">
+              {{ comment.content|linebreaksbr }}
+            </div>
+            <div class="comment-footer">
+              <div class="comment-date">
+                {{ comment.dt_created|date:"Y년 n월 j일" }}
+              </div>
+                <form action='{% url "process-like" comment_ctype_id comment.id%}' method='post'>
+                  {% csrf_token %}
+                  <button class="like-button" type="submit" data-login-required>
+                    {% if comment in liked_comments %}
+                      <img width="21px" src="{% static 'coplate/icons/ic-heart-orange.svg' %}" alt="like icon">
+                    {% else %}
+                      <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like icon">
+                    {%endif%}
+                    <span> 좋아요 {{comment.likes.count}}</span>
+                  </button>
+                </form>
+                
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if cafe.author == user %}
+      <div class="footer">
+        <div class="buttons">
+          <a class="cp-button warn" href="{% url 'cafe-delete' cafe.id %}">삭제</a>
+          <a class="cp-button secondary" href="{% url 'cafe-update' cafe.id %}">수정</a>
+        </div>
+      </div>
+    {% endif %}
+  </article>
+</main>
+{% endblock content %}
+{% block js %}
+<script>
+  const isAuthenticated= '{{user.is_authenticated}}' === 'True';
+</script>
+<script src="{% static 'coplate/js/auth.js'%}"></script>
+<script src="{% static 'coplate/js/carousel.js'%}"></script>
+
+{% endblock js %}

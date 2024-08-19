@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}{{ profile_user.nickname }} | Coplate{% endblock title %}
+{% block title %}{{ profile_user.name }} | Coplate{% endblock title %}
 
 {% block content %}
 <main class="site-body">
@@ -10,7 +10,7 @@
     <div class="content max-content-width">
       <div class="cp-avatar large profile-pic" style="background-image: url('{{ profile_user.profile_pic.url }}')"></div>
       <div class="info">
-        <h1 class="username">{{ profile_user.nickname }}</h1>
+        <h1 class="username">{{ profile_user.name }}</h1>
         {% if profile_user == user %}
           <a class="edit" href="{% url 'profile-update' %}">
             <img class="cp-icon small" src="{% static 'coplate/icons/ic-pen.svg' %}" alt="Pen Icon">
@@ -55,7 +55,7 @@
 
   <div class="content-list max-content-width">
     <div class="header">
-      <h2>{{ profile_user.nickname }}님의 최신 리뷰</h2>
+      <h2>{{ profile_user.name }}님의 최신 리뷰</h2>
       {% if user_reviews %}
         <a class="cp-ic-button after circle morereview" href="{% url 'user-review-list' profile_user.id %}">
           리뷰 전체보기

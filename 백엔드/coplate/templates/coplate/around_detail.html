@@ -15,7 +15,7 @@
       <a class="review-author" href="{% url 'profile' review.author.id %}">
         <div class="author">
           <div class="cp-avatar" style="background-image: url('{{ review.author.profile_pic.url }}')"></div>
-          <span>{{ review.author.nickname }}</span>
+          <span>{{ review.author.name }}</span>
         </div>
       </a>
       <date class="date">{{ review.dt_created|date:"Y년 n월 j일" }}</date>
@@ -97,7 +97,7 @@
               <a href="{% url 'profile' comment.author.id %}">
                 <div class="author">
                   <div class="cp-avatar" style="background-image: url('{{ comment.author.profile_pic.url }}')"></div>
-                  <span>{{ comment.author.nickname }}</span>
+                  <span>{{ comment.author.name }}</span>
                 </div>
               </a>
               {% if user == comment.author %}

@@ -124,14 +124,20 @@ CORS_ALLOW_CREDENTIALS = True
 #         'PORT':env("DB_PORT"), 
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'drip_shot',
+#         'USER': 'isaac',
+#         'PASSWORD': 'sharon11@@',
+#         'HOST':'localhost',# 원격 서버 이용하면 바꿔야됨 
+#         'PORT':'5432', 
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'drip_shot',
-        'USER': 'isaac',
-        'PASSWORD': 'sharon11@@',
-        'HOST':'localhost',# 원격 서버 이용하면 바꿔야됨 
-        'PORT':'5432', 
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

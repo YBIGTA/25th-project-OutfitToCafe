@@ -1,13 +1,13 @@
 {% extends "coplate_base/base_with_navbar.html" %}
 {% load static %}
 
-{% block title %}{{ profile_user.nickname }}님의 리뷰 | Coplate{% endblock title %}
+{% block title %}{{ profile_user.name }}님의 리뷰 | Coplate{% endblock title %}
 
 {% block content %}
 <main class="site-body">
   <div class="content-list max-content-width">
     <div class="header">
-      <h2>{{ profile_user.nickname }}님의 리뷰 ({{ paginator.count }})</h2>
+      <h2>{{ profile_user.name }}님의 리뷰 ({{ paginator.count }})</h2>
     </div>
     {% include "components/review_list.html" with reviews=user_reviews empty_message="아직 리뷰가 없어요:(" %}
 
