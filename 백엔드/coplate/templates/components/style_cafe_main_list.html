@@ -2,8 +2,7 @@
   <div class="contents_clothes">
     
     {% for cafe in style_cafe %}
-    여기가 개빡인데 누르면 그걸 가지고 들어가야 되는데 
-      <a href="{% url 'cafe-detail' cafe.id %}">
+      <a href="{% url 'cafe-detail' pk=cafe.pk %}">
         <div class="clothes_main">
           <div style="background-image: url('{{ cafe.image1.url }}');"></div>
           

@@ -1,0 +1,86 @@
+[
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 1,
+        "fields": {
+            "keyword": "레트로"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 2,
+        "fields": {
+            "keyword": "스포티"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 3,
+        "fields": {
+            "keyword": "로맨틱"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 4,
+        "fields": {
+            "keyword": "캐주얼"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 5,
+        "fields": {
+            "keyword": "미니멀"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 6,
+        "fields": {
+            "keyword": "걸리시"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 7,
+        "fields": {
+            "keyword": "클래식"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 8,
+        "fields": {
+            "keyword": "시크"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 9,
+        "fields": {
+            "keyword": "고프코어"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 10,
+        "fields": {
+            "keyword": "스트릿"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 11,
+        "fields": {
+            "keyword": "워크웨어"
+        }
+    },
+    {
+        "model": "coplate.StyleKeyword",
+        "pk": 12,
+        "fields": {
+            "keyword": "시티보이"
+        }
+    }
+]

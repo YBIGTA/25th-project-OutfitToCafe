@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe List</title></head><body>
+        {% for cafe in cafes %}
+        <p>{{ cafe.name }} - {{ cafe.address }}</p>
+    {% empty %}
+        <p>No cafes found.</p>
+    {% endfor %}
+    
+</body></html>

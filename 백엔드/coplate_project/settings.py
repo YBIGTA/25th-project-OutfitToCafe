@@ -108,8 +108,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'coplate_project.wsgi.application'
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -140,6 +140,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -195,22 +196,22 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-[
-    {
-        "AllowedHeaders": [
-            "*"
-        ],
-        "AllowedMethods": [
-            "GET",
-            "POST",
-            "PUT"
-        ],
-        "AllowedOrigins": [
-            "*"
-        ],
-        "ExposeHeaders": []
-    }
-]
+# [
+#     {
+#         "AllowedHeaders": [
+#             "*"
+#         ],
+#         "AllowedMethods": [
+#             "GET",
+#             "POST",
+#             "PUT"
+#         ],
+#         "AllowedOrigins": [
+#             "*"
+#         ],
+#         "ExposeHeaders": []
+#     }
+# ]
 LOGIN_URL = 'account_login'
 ACCOUNT_SIGNUP_REDIRECT_URL = 'profile-set'
 LOGIN_REDIRECT_URL = 'index'
@@ -234,13 +235,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 # AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-AWS_REGION = 'ap-northeast-2'
+# AWS_REGION = 'ap-northeast-2'
 ###S3 Storages
-AWS_STORAGE_BUCKET_NAME = 'drip-shot' # 설정한 버킷 이름
+# AWS_STORAGE_BUCKET_NAME = 'drip-shot' # 설정한 버킷 이름
 # AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com'
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/' # 원하는 곳으로 보내주기 > 모델 파일에서 경로 지정
+#AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com'
+#AWS_S3_OBJECT_PARAMETERS = {
+#    'CacheControl': 'max-age=86400',
+#}
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/' # 원하는 곳으로 보내주기 > 모델 파일에서 경로 지정

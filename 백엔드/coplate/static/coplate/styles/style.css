@@ -138,7 +138,8 @@ ul.navbar li {
 
 .content-list .contents {
   display: grid;
-  grid-template-columns: repeat(20, minmax(300px, 1fr));
+  grid-auto-flow:column;
+  grid-template-columns: repeat(70, minmax(300px, 1fr));
   gap: 46px 40px;
   overflow-x: auto;
   white-space: nowrap;
@@ -209,9 +210,10 @@ ul.navbar li {
   min-width: auto;
 }
 
+
 .content-list .content .thumb {
   display: block;
-  height: 167px;
+  height: 250px;
   border-radius: 18px;
   background-position: center;
   background-size: cover;
@@ -264,6 +266,24 @@ ul.navbar li {
   text-decoration: none;
 }
 
+/* .keywords 내 .keyword 스타일 */
+.content-list .keywords {
+  display: flex;
+  flex-wrap: wrap; /* 줄바꿈을 허용하여 가로폭에 맞게 조절 */
+  gap: 10px; /* 키워드 간 간격 */
+  margin-top: 10px; /* 상단 마진 */
+}
+
+.content-list .keywords .keyword {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: capitalize; /* 첫 글자 대문자 */
+  font-size: 20px;
+  display: inline-block;
+}
 .content-list .content .date {
   font-size: 14px;
   letter-spacing: -0.21px;

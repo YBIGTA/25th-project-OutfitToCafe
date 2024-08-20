@@ -1,8 +1,7 @@
-<div class ="content-list"> <!-- 이렇게 감싸줘야 함 -->
-
+<div class="content-list">
   <div class="contents">
-    {% for drip in dripshot %}
-      <a href="{% url 'dripshot-detail' dripshot.id %}">
+    {% for drip in drip_shot_review %}
+      <a href="{% url 'dripshot-detail' drip.id %}">
         <section class="cp-card content">
           <div class="clothes" style="background-image: url('{{ drip.image1.url }}');"></div>
           <div class="body">
@@ -18,5 +17,4 @@
       <p class="empty">{{ empty_message }}</p>
     {% endfor %}
   </div>
-  
 </div>

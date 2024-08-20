@@ -1,0 +1,134 @@
+[
+    {
+        "model": "coplate.user",
+        "pk": 1,
+        "fields": {
+            "name": "Test User",
+            "profile_pic": "person/default_profile_pic.jpg",
+            "profile_pic_url": "https://yonfen.s3.amazonaws.com/default_profile_pic.jpg",
+            "birth_date": "1990-01-01",
+            "gender": 1,
+            "recommend_location": "서울역",
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "password": "pbkdf2_sha256$216000$...$...",  
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false
+        }
+    },
+    {
+        "model": "coplate.cafe",
+        "pk": 1,
+        "fields": {
+            "name": "오푸",
+            "address": "서울시 강남구",
+            "address_url": "https://map.naver.com/",
+            "total_review": 10,
+            "sns_link": "https://instagram.com/",
+            "image1": "cafe_images/1_오푸_images/오푸_image_1.jpg",
+            "image2": "cafe_images/1_오푸_images/오푸_image_2.jpg",
+            "image3": "cafe_images/1_오푸_images/오푸_image_3.jpg",
+            "image4": "cafe_images/1_오푸_images/오푸_image_4.jpg",
+            "image5": "cafe_images/1_오푸_images/오푸_image_5.jpg",
+            "rating": 4.5,
+            "short_description": "편안한 분위기의 카페 오푸",
+            "content": "오푸는 조용하고 아늑한 분위기를 자랑하는 카페입니다.",
+            "author": 1
+        }
+    },
+    {
+        "model": "coplate.cafe",
+        "pk": 2,
+        "fields": {
+            "name": "모센즈스위트",
+            "address": "서울시 종로구",
+            "address_url": "https://map.naver.com/",
+            "total_review": 25,
+            "sns_link": "https://instagram.com/",
+            "image1": "cafe_images/2_모센즈스위트_images/모센즈스위트_image_4.jpg",
+            "image2": "cafe_images/2_모센즈스위트_images/모센즈스위트_image_9.jpg",
+            "image3": "cafe_images/2_모센즈스위트_images/모센즈스위트_image_10.jpg",
+            "image4": "cafe_images/2_모센즈스위트_images/모센즈스위트_image_11.jpg",
+            "image5": "cafe_images/2_모센즈스위트_images/모센즈스위트_image_5.jpg",
+            "rating": 4.7,
+            "short_description": "모던한 분위기의 카페 모센즈스위트",
+            "content": "모센즈스위트는 고급스러운 인테리어와 함께 다양한 디저트를 제공합니다.",
+            "author": 1
+        }
+    },
+    {
+        "model": "coplate.dripshot",
+        "pk": 1,
+        "fields": {
+            "title": "Dripshot A",
+            "image1": "user_pic/dripshot_a_image1.jpg",
+            "image1_url": "https://example.com/dripshot_a_image1.jpg",
+            "image2": "user_pic/dripshot_a_image2.jpg",
+            "image2_url": "https://example.com/dripshot_a_image2.jpg",
+            "image3": "user_pic/dripshot_a_image3.jpg",
+            "image3_url": "https://example.com/dripshot_a_image3.jpg",
+            "image4": "user_pic/dripshot_a_image4.jpg",
+            "image4_url": "https://example.com/dripshot_a_image4.jpg",
+            "image5": "user_pic/dripshot_a_image5.jpg",
+            "image5_url": "https://example.com/dripshot_a_image5.jpg",
+            "dt_created": "2024-08-20T00:00:00Z",  
+            "dt_updated": "2024-08-20T00:00:00Z",  
+            "content": "This is a sample dripshot content.",
+            "cafe": 1,
+            "author": 1
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 1,
+        "fields": {
+            "keyword": "편안한"
+        }
+    },
+    {
+        "model": "coplate.stylekeyword",
+        "pk": 2,
+        "fields": {
+            "keyword": "모던한"
+        }
+    },
+    {
+        "model": "coplate.userstylekeyword",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "style_keyword": 1
+        }
+    },
+    {
+        "model": "coplate.cafestylekeyword",
+        "pk": 1,
+        "fields": {
+            "cafe": 1,
+            "style_keyword": 1
+        }
+    },
+    {
+        "model": "coplate.like",
+        "pk": 1,
+        "fields": {
+            "dt_created": "2024-08-20T00:00:00Z",
+            "user": 1,
+            "content_type": 1,
+            "object_id": 1
+        }
+    },
+    {
+        "model": "coplate.comment",
+        "pk": 1,
+        "fields": {
+            "content": "This is a comment on a cafe.",
+            "dt_created": "2024-08-20T00:00:00Z",
+            "dt_updated": "2024-08-20T00:00:00Z",
+            "author": 1,
+            "content_type": 1,
+            "object_id": 1
+        }
+    }
+]
