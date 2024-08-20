@@ -6,6 +6,20 @@ from rembg import remove
 import io
 import json
 
+### To run this model the following commands must be downloaded (Assuming you already have downloaded other packages) 
+"""
+For CNN Model:
+pip install —upgrade torch torchvision 
+pip install —upgrade certifi
+/Applications/Python\ 3.x/Install\ Certificates.command    (x 는 파이썬 (python)버전 번호로 바꾸면 됩니다!) 
+
+For Background Removal
+pip install rembg 
+또한 https://onnxruntime.ai/를 확인하면서 다운받기 
+(press Get Started at the top of the site and then click on the platforms to see how to download onnxruntime through bash/powershell) 
+For clearer instructions: please reference: https://github.com/danielgatis/rembg
+"""
+
 # Loading our trained model
 model_save_path = '/Users/dennycheong/24 여름방학/YBIGTA/신입플/CNN_Model/blur_best_efficientnetb0.pth'
 efficientnet = models.efficientnet_b0(weights=None)
