@@ -32,7 +32,7 @@ urlpatterns = [
 
      path('', RedirectView.as_view(url=reverse_lazy('account_login'), permanent=False)), # 로그인 페이지로 리디렉션
     path('image_upload/', views.ImageUploadView.as_view(), name='image-upload'),  # 이미지 업로드 페이지
-    path('result/', views.ClassificationResultView.as_view(), name='classification-result'), 
+    path('result/', views.ClassificationResultView.as_view(), name='classification-result'),
     # cafe
     path('index/', views.IndexView.as_view(), name='index'),
     path('cafes/', views.CafeListView.as_view(), name='cafe-list'),

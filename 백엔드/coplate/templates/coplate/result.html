@@ -1,19 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Classification Result</title>
-</head>
-<body>
-    <h1>Classification Result</h1>
-    {% if uploaded_image %}
-        <img src="{{ uploaded_image }}" alt="Uploaded Image" style="max-width: 300px;">
-    {% endif %}
-    <h2>Results:</h2>
-    <ul>
-        {% for label, probability in classification_result.items %}
-            <li>{{ label }}: {{ probability|floatformat:2 }}%</li>
+{% extends "coplate_base/base_with_navbar.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Classification Result | Coplate{% endblock title %}
+
+{% block content %}
+<main class="result-body">
+  <div class="result-content-list">
+    <div class="result-header">
+      <h2>Classification Result</h2>
+    </div>
+
+    <!-- 업로드된 이미지 섹션 -->
+    <div class="result-image-section">
+        {% if uploaded_image %}
+            <img src="{{ uploaded_image }}" alt="Uploaded Image" class="result-image">
+        {% endif %}
+    </div>
+
+    <!-- 분류 결과 섹션 -->
+    <h2 class="result-subtitle">Results:</h2>
+    <ul class="result-list">
+        {% for key, value in classification_result.items %}
+            <li>{{ key }}: {{ value }}%</li>
         {% endfor %}
     </ul>
-</body>
-</html>
+
+    <!-- 추천된 카페 목록 -->
+    <h2 class="result-subtitle">Recommended Cafes:</h2>
+    {% include "components/style_cafe_main_list.html" with style_cafe=recommended_cafes empty_message="아직 추천할 카페가 없어요 :(" %}
+   
+    <!-- 페이지네이션 -->
+    {% if is_paginated %}
+      {% include 'components/pagination.html' with page_obj=page_obj %}
+    {% endif %}
+  </div>
+</main>
+{% endblock content %}

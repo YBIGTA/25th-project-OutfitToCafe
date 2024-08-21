@@ -20,6 +20,7 @@ from .forms import *
 from django.db.models import Q, Count
 from django.http import JsonResponse
 from django.http import HttpResponse
+import random
 
 from django.urls import reverse_lazy
 
@@ -127,6 +128,8 @@ with open(top_json_output_path, "w", encoding='utf-8') as json_file:
     json.dump(top_class_probabilities, json_file, ensure_ascii=False, indent=4)
 
 print(f"Top Classification results saved to {top_json_output_path}")
+
+
 class ImageUploadView(FormView):
     form_class = ImageUploadForm
     template_name = 'coplate/dex.html'
@@ -171,10 +174,37 @@ class ClassificationResultView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['classification_result'] = user.classification_result
+        classification_result = user.classification_result
+        context['classification_result'] = classification_result
         context['uploaded_image'] = user.uploaded_image.url if user.uploaded_image else None
+
+        cafes_to_show = []
+        total_slots = 10  # 추천할 카페의 총 개수
+        remaining_slots = total_slots
+
+        for style, percentage in classification_result.items():
+            if remaining_slots <= 0:
+                break
+
+            try:
+                style_keyword = StyleKeyword.objects.get(keyword=style)  # 'keyword'로 수정
+                style_cafes = list(Cafe.objects.filter(style_keywords=style_keyword))
+                num_cafes = min(int(percentage * total_slots), remaining_slots)
+                selected_cafes = random.sample(style_cafes, min(num_cafes, len(style_cafes)))
+
+                cafes_to_show.extend(selected_cafes)
+                remaining_slots -= len(selected_cafes)
+
+            except StyleKeyword.DoesNotExist:
+                continue
+
+        # 남은 슬롯이 있을 경우 다른 키워드의 카페로 채우기
+        if remaining_slots > 0:
+            additional_cafes = Cafe.objects.exclude(id__in=[cafe.id for cafe in cafes_to_show])
+            cafes_to_show.extend(random.sample(list(additional_cafes), min(remaining_slots, len(additional_cafes))))
+
+        context['recommended_cafes'] = cafes_to_show
         return context
-    
 
     
 class LikedCafeListView(ListView):

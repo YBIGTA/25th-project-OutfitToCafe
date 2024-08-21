@@ -1,15 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Image Upload</title>
-</head>
-<body>
-    <h1>Upload an Image for Classification</h1>
-    <form method="post" enctype="multipart/form-data" action="{% url 'image-upload' %}">
+{% extends "coplate_base/base_with_navbar.html" %}
+
+{% block title %}Upload an Image for Classification | Coplate{% endblock title %}
+
+{% block content %}
+<main class="image-upload-body">
+  <div class="image-upload-content-list">
+    <div class="image-upload-header">
+      <h2>Upload an Image for Classification</h2>
+    </div>
+
+    <div class="image-upload-form">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload and Classify</button>
-    </form>
-</body>
-</html>
+        <div class="image-upload-form-group">
+          {{ form.as_p }}
+        </div>
+        <div class="image-upload-buttons">
+          <button type="submit" class="image-upload-button submit">Upload and Classify</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}

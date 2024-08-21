@@ -23,12 +23,7 @@
       </div>
     </div>
   </div>
-  <h1>Upload an Image for Classification</h1>
-  <form method="post" enctype="multipart/form-data" action="{% url 'image-upload' %}">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Upload and Classify</button>
-  </form>
+  
   <div class="content-list max-content-width">
     <div class="header">
       <h2>오늘의 드립샷</h2>

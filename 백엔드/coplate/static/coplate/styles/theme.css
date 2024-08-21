@@ -5,17 +5,17 @@
 
 :root {
   --text: #2f2c28;
-  --link: #ffcc00;
+  --link: #204180;
   --button-text: #fff;
-  --button-primary-background: #ffcc00;
-  --button-primary-hover-background: #ffe680;
+  --button-primary-background: #204180;
+  --button-primary-hover-background: #647eaf;
   --button-warn-background: #f9592c;
   --button-secondary-background: #bcb9b0;
-  --ic-button-circle: #ffcc00;
+  --ic-button-circle: #204180;
   --input-background: #fff;
   --input-border: #cccac3;
   --input-placeholder: #bcb9b0;
-  --input-focus-border: #ffcc00;
+  --input-focus-border: #204180;
   --input-focus-background: #fffdf3;
   --input-error: #e6584e;
   --input-error-border: #e6584e;
@@ -25,7 +25,7 @@
   --chip-green-text: #79c9c5;
   --chip-green-border: #06aea7;
   --avatar-placeholder: #e3e1dc;
-  --stars: #ffcc00;
+  --stars: #204180;
   --dialog-border: #e3e1dc;
   --dialog-background: #f6f5f3;
   --dialog-info: #e1811b;
@@ -321,12 +321,9 @@ textarea.cp-input {
 
 /* Card */ 
 
-.cp-card {
-  border-radius: 21px;
-  box-shadow: 0 3px 16px 0 #f1ece2;
-  background-color: #ffffff;
-  will-change: box-shadow;
-}
+
+
+
 .cp-card-around{
   border-radius: 21px;
   box-shadow: 0 3px 16px 0 #f1ece2;
