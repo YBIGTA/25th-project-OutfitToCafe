@@ -12,23 +12,13 @@ This website takes a picture of the outfit you are currently wearing to give you
    	-  ResNet-18
    	-  EfficientNet
    - Final Classification model located at CNN_Models
-   	- Outputs JSON file with vector filled with classification probabilities \\
-[View classification_results.json](CNN_Model/Classification_Results/classification_results.json)
-   	- Top_Classification_probabilities used in final implemnentation
+   	- Outputs JSON file with vector filled with [classification probabilities](CNN_Model/Classification_Results/classification_results.json)
+   	- [Top_Classification_probabilities](CNN_Model/Classification_Results/top_classification_results.json) used in final implementation
 3. NLP
    - Bert
    - 
-4. Final Results
-
-
-
-
-## Executing program
-
-# Website Backend
-
-# Website Frontend
-
+4. Website
+   - 설명할것
 
 
 
@@ -39,8 +29,9 @@ Minseo Kim, Dogeun Im, Jiyeon Seo, Isaac Chung, Jaebin Cheong
 
 ## Version History
 
-* 0.1
-	* Initial Release (성수역/Seong-Su Station Only)
+### 0.1
+- **Initial Release**
+  - Location: 성수역 / Seong-Su Station Only
 
 ## Acknowledgments
 
