@@ -2,11 +2,7 @@
 
 This website takes a picture of the outfit you are currently wearing to give you cafe recommendations based on the outfit you are wearing! 
 
-## Description
-
-
-
-# Implementation Description
+## Implementation Description
 
 1. Data Scraping (폴더명)
    - https://www.musinsa.com/snap/main/recommend (Style/Images)
@@ -17,7 +13,7 @@ This website takes a picture of the outfit you are currently wearing to give you
    	-  EfficientNet
    - Final Classification model located at CNN_Models
    	- Outputs JSON file with vector filled with classification probabilities \\
-  ![Alt text](CNN_Model/Classification_Results/classification_results.json)
+[View classification_results.json](CNN_Model/Classification_Results/classification_results.json)
    	- Top_Classification_probabilities used in final implemnentation
 3. NLP
    - Bert
