@@ -18,7 +18,7 @@ This website takes a picture of the outfit you are currently wearing to give you
    - Bert
    - 
 4. Website
-   - 설명할것
+   - 설명 부탁드립니다. 
 
 
 
