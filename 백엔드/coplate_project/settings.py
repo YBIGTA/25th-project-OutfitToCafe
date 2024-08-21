@@ -234,7 +234,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AWS_SECRET_ACCESS_KEY = get_secret('AWS_SECRET_ACCESS_KEY') 
 # AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 # AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-
 # AWS_REGION = 'ap-northeast-2'
 ###S3 Storages
 # AWS_STORAGE_BUCKET_NAME = 'drip-shot' # 설정한 버킷 이름
