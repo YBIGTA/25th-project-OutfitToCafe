@@ -167,8 +167,49 @@ class ImageUploadView(FormView):
         user.save()
 
         return redirect(self.success_url)
-
+    
 class ClassificationResultView(TemplateView):
+    template_name = 'coplate/result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        classification_result = user.classification_result
+        context['classification_result'] = classification_result
+        context['uploaded_image'] = user.uploaded_image.url if user.uploaded_image else None
+
+        cafes_to_show = []
+        total_slots = 10  # 총 추천할 카페의 개수
+        remaining_slots = total_slots
+
+        # 스타일 키워드에 해당하는 카페들을 추천
+        for style, percentage in classification_result.items():
+            if remaining_slots <= 0:
+                break
+
+            try:
+                style_keyword = get_object_or_404(StyleKeyword, keyword=style)  # 정확한 키워드 검색
+                style_cafes = list(Cafe.objects.filter(style_keywords=style_keyword).exclude(id__in=[cafe.id for cafe in cafes_to_show]))
+                
+                num_cafes = min(int(percentage * total_slots), remaining_slots)
+                selected_cafes = random.sample(style_cafes, min(num_cafes, len(style_cafes)))
+
+                cafes_to_show.extend(selected_cafes)
+                remaining_slots -= len(selected_cafes)
+
+            except StyleKeyword.DoesNotExist:
+                continue
+
+        # 남은 슬롯이 있을 경우 다른 키워드의 카페로 채우기
+        if remaining_slots > 0:
+            additional_cafes = Cafe.objects.exclude(id__in=[cafe.id for cafe in cafes_to_show])
+            cafes_to_show.extend(random.sample(list(additional_cafes), min(remaining_slots, len(additional_cafes))))
+
+        # 추천된 카페들을 템플릿에 전달
+        context['recommended_cafes'] = cafes_to_show
+
+        return context
+class ClassificationResultVview(TemplateView):
     template_name = 'coplate/result.html'
 
     def get_context_data(self, **kwargs):

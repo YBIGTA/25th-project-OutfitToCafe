@@ -22,7 +22,7 @@
             
             <!-- 스타일 키워드 표시 -->
             <div class="style-keywords">
-              {% for keyword in cafe.style_keywords.all|slice:":3" %}
+              {% for keyword in cafe.style_keywords.all|slice:":6" %}
               <span class="cp-chip">{{ keyword }}</span>
               {% empty %}
                 <span class="cp-chip">스타일 키워드가 없습니다</span>
