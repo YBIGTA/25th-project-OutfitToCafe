@@ -7,7 +7,9 @@ from django.views.generic import (
     DetailView, 
     CreateView, 
     UpdateView, 
-    DeleteView
+    DeleteView,
+    FormView, 
+    TemplateView,
 )
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.contenttypes.models import ContentType
@@ -19,9 +21,162 @@ from django.db.models import Q, Count
 from django.http import JsonResponse
 from django.http import HttpResponse
 
+from django.urls import reverse_lazy
 
 from django.contrib.contenttypes.models import ContentType
+import torch
+from torchvision import models, transforms
+from PIL import Image
+import torch.nn.functional as F
+from rembg import remove
+import io
+import json
 
+
+
+### 필요한 패키지 설치
+"""
+For CNN Model:
+pip install —upgrade torch torchvision 
+pip install —upgrade certifi
+/Applications/Python\ 3.x/Install\ Certificates.command
+
+For Background Removal:
+pip install rembg 
+또한 https://onnxruntime.ai/를 확인하면서 onnxruntime 다운로드
+자세한 설치 방법은: https://github.com/danielgatis/rembg
+"""
+
+# 모델 로드 경로
+model_save_path = '/home/isaac/caffe/25th-project-OutfitToCafe/백엔드/mlmodel/blur_best_efficientnetb0.pth'
+efficientnet = models.efficientnet_b0(weights=None)
+
+# 1000개의 클래스를 가진 사전 훈련된 모델 가중치를 로드
+state_dict = torch.load(model_save_path, map_location=torch.device('cpu'))
+
+# 모델 가중치를 로드 (마지막 레이어 제외)
+filtered_state_dict = {k: v for k, v in state_dict.items() if 'classifier' not in k}
+missing_keys, unexpected_keys = efficientnet.load_state_dict(filtered_state_dict, strict=False)
+
+# 12개의 클래스로 마지막 레이어 설정
+num_classes = 12
+efficientnet.classifier = torch.nn.Sequential(
+    torch.nn.Dropout(0.4),
+    torch.nn.Linear(efficientnet.classifier[1].in_features, num_classes)
+)
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+efficientnet = efficientnet.to(device)
+efficientnet.eval()
+
+# 이미지 전처리
+preprocess = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+# 이미지 로드 및 배경 제거
+img_path = '/home/isaac/caffe/25th-project-OutfitToCafe/백엔드/media/cafe_images/3_어피스앤드피스_images/어피스앤드피스_front_image.jpg'
+with open(img_path, 'rb') as img_file:
+    img_data = img_file.read()
+
+removed_bg_data = remove(img_data)
+image_without_bg = Image.open(io.BytesIO(removed_bg_data)).convert('RGB')
+
+# 이미지 전처리 적용
+input_tensor = preprocess(image_without_bg)
+input_batch = input_tensor.unsqueeze(0).to(device)  
+
+# 모델 예측
+with torch.no_grad():
+    output = efficientnet(input_batch)
+
+# 소프트맥스 적용하여 클래스 확률 계산
+probabilities = F.softmax(output, dim=1)
+
+# 상위 3개 클래스 예측
+top_probabilities, top_indices = torch.topk(probabilities, k=3, dim=1)
+
+# 넘파이 배열로 변환
+top_probabilities_np = top_probabilities.cpu().numpy().flatten()
+top_indices_np = top_indices.cpu().numpy().flatten()
+
+# 클래스 인덱스를 실제 클래스 이름으로 변환
+idx_to_class = {0: "캐주얼", 1: "시크", 2: "시티보이", 3: "클래식", 4: "걸리시", 5: "미니멀", 
+                6: "레트로", 7: "로맨틱", 8: "스포티", 9: "스트릿", 10: "워크웨어", 11: "고프코어"}
+
+top_class_probabilities = {idx_to_class[i]: 0.0 for i in range(len(idx_to_class))} 
+
+# 상위 3개 클래스의 확률을 저장
+for i in range(len(top_probabilities_np)):
+    class_idx = top_indices_np[i]
+    probability = top_probabilities_np[i] / sum(top_probabilities_np)
+    top_class_probabilities[idx_to_class[class_idx]] = float(round(probability, 1))
+
+# 필요한 클래스만 필터링
+top_3 = {}
+for idx in top_indices_np:
+    if idx_to_class[idx] in top_class_probabilities:
+        top_3[idx_to_class[idx]] = top_class_probabilities[idx_to_class[idx]]
+top_class_probabilities = top_3
+
+# JSON 파일로 저장
+top_json_output_path = '/home/isaac/caffe/25th-project-OutfitToCafe/백엔드/mlmodel/classification_results.json'
+with open(top_json_output_path, "w", encoding='utf-8') as json_file:
+    json.dump(top_class_probabilities, json_file, ensure_ascii=False, indent=4)
+
+print(f"Top Classification results saved to {top_json_output_path}")
+class ImageUploadView(FormView):
+    form_class = ImageUploadForm
+    template_name = 'coplate/dex.html'
+    success_url = reverse_lazy('classification-result')
+
+    def form_valid(self, form):
+        image_file = form.cleaned_data['image']
+        user = self.request.user
+        user.uploaded_image = image_file
+        
+        # 이미지 처리 및 분류 수행
+        img_data = image_file.read()
+        removed_bg_data = remove(img_data)
+        image_without_bg = Image.open(io.BytesIO(removed_bg_data)).convert('RGB')
+        input_tensor = preprocess(image_without_bg)
+        input_batch = input_tensor.unsqueeze(0).to(device)
+
+        with torch.no_grad():
+            output = efficientnet(input_batch)
+        probabilities = F.softmax(output, dim=1).cpu()
+
+        top_probabilities, top_indices = torch.topk(probabilities, k=3, dim=1)
+
+        top_probabilities_np = top_probabilities.squeeze(0).numpy()
+        top_indices_np = top_indices.squeeze(0).numpy()
+
+        top_class_probabilities = {}
+        total_probability = top_probabilities_np.sum()
+        for i in range(len(top_probabilities_np)):
+            class_idx = top_indices_np[i]
+            probability = top_probabilities_np[i] / total_probability
+            top_class_probabilities[idx_to_class[class_idx]] = round(float(probability), 1)
+
+        user.classification_result = top_class_probabilities
+        user.save()
+
+        return redirect(self.success_url)
+
+class ClassificationResultView(TemplateView):
+    template_name = 'coplate/result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['classification_result'] = user.classification_result
+        context['uploaded_image'] = user.uploaded_image.url if user.uploaded_image else None
+        return context
+    
+
+    
 class LikedCafeListView(ListView):
     model = Cafe
     template_name = 'coplate/liked_cafe_list.html'

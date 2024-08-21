@@ -88,3 +88,5 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea,
         }
+class ImageUploadForm(forms.Form):
+    image = forms.ImageField(label='Upload an image')

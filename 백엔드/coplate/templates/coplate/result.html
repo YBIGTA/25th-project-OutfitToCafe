@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classification Result</title>
+</head>
+<body>
+    <h1>Classification Result</h1>
+    {% if uploaded_image %}
+        <img src="{{ uploaded_image }}" alt="Uploaded Image" style="max-width: 300px;">
+    {% endif %}
+    <h2>Results:</h2>
+    <ul>
+        {% for label, probability in classification_result.items %}
+            <li>{{ label }}: {{ probability|floatformat:2 }}%</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

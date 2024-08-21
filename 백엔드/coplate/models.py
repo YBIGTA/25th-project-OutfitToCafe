@@ -47,7 +47,8 @@ class User(AbstractUser):
     recommend_location = models.CharField(max_length=100, error_messages={"null": "존재하지 않는 역입니다."})
     following = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='followers')
     style_keywords = models.ManyToManyField(StyleKeyword, related_name='users', blank=True)
-
+    uploaded_image = models.ImageField(upload_to='uploaded_images/', null=True, blank=True)
+    classification_result = models.JSONField(null=True, blank=True)  # 분류 결과를 JSON 형식으로 저장
     def __str__(self):
         return self.email
 
