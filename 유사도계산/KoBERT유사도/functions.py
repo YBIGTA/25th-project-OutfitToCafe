@@ -21,15 +21,11 @@ def get_bert_embedding(text):
     # [CLS] 토큰의 벡터 추출
     return outputs.last_hidden_state[:, 0, :].numpy()
 
-# # 테스트용 코드
-# text = "한국어 모델을 테스트합니다."
-# embedding = get_bert_embedding(text)
-# print(embedding)
-
 # 모든 파일 가져오기 
 def get_all_file_lists(directory):
     return [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
 
+# jaccard 유사도 계산
 def jaccard_similarity(set1, set2):
     # 집합으로 변환
     set1 = set(set1) if isinstance(set1, str) else set1

@@ -7,12 +7,12 @@ import numpy as np
 
 
 # 저장경로 
-save_path = '/Users/minseo/YBIGTA_Proj/similarity/진짜최종/split_equal'
+save_path = './결과'
 
 
 # 스타일 키워드 및 카페 키워드 불러오기 
-keyword_path = '/Users/minseo/YBIGTA_Proj/gpt_keyword/cafe_keyword/split_cafe_keywords.json'
-style_path = '/Users/minseo/YBIGTA_Proj/similarity/equalized_style_keyword_gpt.json'
+keyword_path = '../카페키워드추출/cafe_keyword/split_cafe_keywords.json'
+style_path = '../style_keyword_gpt.json'
 
 with open(keyword_path, 'r', encoding='utf-8') as f:
     cafe_dict = json.load(f) # 카페키워드 (json->dict)

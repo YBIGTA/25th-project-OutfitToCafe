@@ -6,8 +6,8 @@ import json
 import numpy as np
 
 # 스타일 키워드 및 카페 키워드 불러오기 
-keyword_path = '/Users/minseo/YBIGTA_Proj/gpt_keyword/cafe_keyword/야매_keyword_without_weight_filtered.json'
-style_path = '/Users/minseo/YBIGTA_Proj/similarity/equalized_style_keyword_gpt.json'
+keyword_path = '../카페키워드추출/cafe_keyword/split_cafe_keywords.json'
+style_path = '../style_keyword_gpt.json'
 
 with open(keyword_path, 'r', encoding='utf-8') as f:
     cafe_dict = json.load(f) # 카페키워드 (json->dict)
@@ -48,7 +48,7 @@ def countvect_similarity(cafe_df, style_df):
     })
 
     # 결과 데이터프레임 저장
-    countvect_result_df.to_csv('/Users/minseo/YBIGTA_Proj/similarity/최종유사도/카페별스타일_countvect.csv')
+    countvect_result_df.to_csv('./결과/카페별스타일_countvect.csv')
 
 def tfidf_similarity(cafe_df, style_df):
     vectorizer = TfidfVectorizer()
