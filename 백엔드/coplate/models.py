@@ -30,11 +30,14 @@ class StyleKeyword(models.Model):
 
 #     def __str__(self):
 #         return self.name
+def person_pic_upload_to(instance, filename):
+    # 파일이 저장될 경로를 정의
+    return f'user_pics/{filename}'
+
 
 class User(AbstractUser):
     name = models.CharField(max_length=15, null=False, default='Unknown', error_messages={"null": "이름을 입력해주세요."})
-    profile_pic = models.FileField(upload_to=person_pic_upload_to, blank=True, null=True, default='user_pics/default_profile_pic.jpg')
-    profile_pic_url = models.URLField(blank=True, default='https://yonfen.s3.amazonaws.com/default_profile_pic.jpg')
+    profile_pic = models.FileField(upload_to='profile_pics', default='default_profile_pic.jpg')
     GENDER_CHOICES = [
         (1, "남자"),
         (2, "여자")
@@ -97,6 +100,14 @@ class Dripshot(models.Model):
     cafe = models.ForeignKey(Cafe, on_delete=models.CASCADE, related_name='dripshots', null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dripshot')
     likes = GenericRelation('Like', related_query_name='dripshot')
+    RATING_CHOICES = [
+        (1, '★'),
+        (2, '★★'),
+        (3, '★★★'),
+        (4, '★★★★'),
+        (5, '★★★★★'),
+    ]
+    rating = models.IntegerField(choices=RATING_CHOICES, default=None, null=True, blank=True)
 
     def __str__(self):
         return self.title

@@ -69,10 +69,10 @@ urlpatterns = [
    # path('cafes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
     path('dripshot/', views.DripshotListView.as_view(), name='dripshot-list'),
     path('dripshot/list/', views.DripshotMainListView.as_view(), name='dripshot-main-list'),
-    path('dripshot/<int:dripshot_id>/', views.DripshotDetailView.as_view(), name='dripshot-detail'),
+    path('dripshot/<int:pk>/', views.DripshotDetailView.as_view(), name='dripshot-detail'),
     path('dripshot/new/', views.DripshotCreateView.as_view(), name='dripshot-create'),
-    path('dripshot/<int:dripshot_id>/edit/', views.DripshotUpdateView.as_view(), name='dripshot-update'),
-    path('dripshot/<int:dripshot_id>/delete/', views.DripshotDeleteView.as_view(), name='dripshot-delete'),
+    path('dripshot/<int:pk>/edit/', views.DripshotUpdateView.as_view(), name='dripshot-update'),
+    path('dripshot/<int:pk>/delete/', views.DripshotDeleteView.as_view(), name='dripshot-delete'),
     # around 
     path('around/',views.CafeAroundListView.as_view(),name='around-list'), 
     path('around/list',views.CafeAroundMainListView.as_view(),name='around-main-list'),
@@ -83,7 +83,7 @@ urlpatterns = [
     path('cafes/following/', views.FollowingReviewListView.as_view(), name='following-review-list'),
 
     #js
-    path('cafe-autocomplete/', views.cafe_autocomplete, name='cafe-autocomplete'),
+    path('cafe-autocomplete/', views.CafeAutocomplete.as_view(), name='cafe-autocomplete'),
 
 
     # comment

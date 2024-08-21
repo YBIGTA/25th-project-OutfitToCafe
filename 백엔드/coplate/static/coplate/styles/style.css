@@ -139,7 +139,7 @@ ul.navbar li {
 .content-list .contents {
   display: grid;
   grid-auto-flow:column;
-  grid-template-columns: repeat(70, minmax(300px, 1fr));
+  grid-template-columns: repeat(60, minmax(300px, 1fr));
   gap: 46px 40px;
   overflow-x: auto;
   white-space: nowrap;
@@ -148,6 +148,17 @@ ul.navbar li {
 .content-list .contents-around {
   
   display: grid;
+  grid-auto-flow:column;
+  grid-template-columns: repeat(20, minmax(500px, 1fr));
+  gap: 46px 40px;
+  overflow-x: auto;
+  white-space: nowrap;
+  
+}
+.contents-around {
+  
+  display: grid;
+  grid-auto-flow:column;
   grid-template-columns: repeat(20, minmax(500px, 1fr));
   gap: 46px 40px;
   overflow-x: auto;
@@ -169,6 +180,10 @@ ul.navbar li {
 .contents_clothes {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 4개의 동일한 열로 설정 */
+}
+.contents_arounds {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(300px,1fr) ); /* 4개의 동일한 열로 설정 */
 }
 
 .clothes_main {
@@ -234,7 +249,14 @@ ul.navbar li {
   
 }
 
-
+.content-list .content .around {
+  display: block;
+  height: 300px;
+  width: 500px;
+  border-radius: 18px;
+  background-position: center;
+  background-size: cover;
+}
 .content-list .content-around .around {
   display: block;
   height: 300px;
@@ -246,10 +268,18 @@ ul.navbar li {
 .content-list .content .body {
   padding: 30px 25px;
 }
+
 .content-list .content-around .body {
   padding: 30px 25px;
 }
-
+.content-around .around {
+  display: block;
+  height: 300px;
+  width: 500px;
+  border-radius: 18px;
+  background-position: center;
+  background-size: cover;
+}
 
 .content-list .content .title {
   font-size: 22px;

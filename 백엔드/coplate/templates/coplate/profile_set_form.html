@@ -28,20 +28,15 @@
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
-      <div class="gender">
-        {{ form.gender|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:자신을 소개해 주세요!" }}
-        {% for error in form.gender.errors %}
-          <div class="error-message">{{ error }}</div>
-        {% endfor %}
-      </div>
-      <div class="birth_date">
-        {{ form.birth_date|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:자신을 소개해 주세요!" }}
+      
+      <div>
+        {{ form.birth_date|add_class:"cp-input"|attr:"type:date"|attr:"placeholder:생년월일을 선택해주세요"|add_error_class:"error" }}
         {% for error in form.birth_date.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}
       </div>
       <div class="recommend_location">
-        {{ form.recommend_location|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:역이름" }}
+        {{ form.recommend_location|add_class:"cp-input"|add_error_class:"error"|attr:"placeholder:추천받고 싶은 지역을 입력해주세요" }}
         {% for error in form.recommend_location.errors %}
           <div class="error-message">{{ error }}</div>
         {% endfor %}

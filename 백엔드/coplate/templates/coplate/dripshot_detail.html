@@ -21,7 +21,7 @@
       <date class="date">{{ dripshot.dt_created|date:"Y년 n월 j일" }}</date>
       <div class="review-rating">
         <span class="cp-stars">
-          {% for i in ""|ljust:review.rating %}★{% endfor %}
+          {% for i in ""|ljust:dripshot.rating %}★{% endfor %}
         </span>
       </div>
     </div>
@@ -49,12 +49,12 @@
     </div>
     
       <!-- <div class="thumbnails">
-        <img class="thumb" src="{{ review.image1.url }}" data-index="0">
-        {% if review.image2 %}
-          <img class="thumb inactive" src="{{ review.image2.url }}" data-index="1">
+        <img class="thumb" src="{{ dripshot.image1.url }}" data-index="0">
+        {% if dripshot.image2 %}
+          <img class="thumb inactive" src="{{ dripshot.image2.url }}" data-index="1">
         {% endif %}
-        {% if review.image3 %}
-          <img class="thumb inactive" src="{{ review.image3.url }}" data-index="2">
+        {% if dripshot.image3 %}
+          <img class="thumb inactive" src="{{ dripshot.image3.url }}" data-index="2">
         {% endif %}
       </div> -->
     
@@ -71,7 +71,7 @@
         <form action='{% url "process-like" dripshot_ctype_id dripshot.id%}' method='post'>
           {% csrf_token %}
           <button class="like-button" type="submit" data-login-required>
-            {% if likes_review %}
+            {% if dripshot_review %}
             <img width="21px" src="{% static 'coplate/icons/ic-heart-orange.svg' %}" alt="filled like icon">
             {% else %}
             <img width="21px" src="{% static 'coplate/icons/ic-heart.svg' %}" alt="like icon">
@@ -85,7 +85,7 @@
         </div>
       </div>
       
-      <form class="comment-create-form" action="{% url "comment-create" review.id %}" method="post">
+      <form class="comment-create-form" action="{% url "comment-create" dripshot.id %}" method="post">
         {% csrf_token %}
         {% if user.is_authenticated %}
           {{ form.content|attr:"placeholder:댓글 내용을 입력해주세요."|add_class:"cp-input" }}
@@ -99,7 +99,7 @@
       </form>
 
       <div class="comment-list">
-        {% for comment in review.comments.all %}
+        {% for comment in dripshot.comments.all %}
           <div class="comment">
             <div class="comment-header">
               <a href="{% url 'profile' comment.author.id %}">
@@ -141,11 +141,11 @@
       </div>
     </div>
 
-    {% if review.author == user %}
+    {% if dripshot.author == user %}
       <div class="footer">
         <div class="buttons">
-          <a class="cp-button warn" href="{% url 'dripshot-delete' review.id %}">삭제</a>
-          <a class="cp-button secondary" href="{% url 'dripshot-update' review.id %}">수정</a>
+          <a class="cp-button warn" href="{% url 'dripshot-delete' dripshot.id %}">삭제</a>
+          <a class="cp-button secondary" href="{% url 'dripshot-update' dripshot.id %}">수정</a>
         </div>
       </div>
     {% endif %}

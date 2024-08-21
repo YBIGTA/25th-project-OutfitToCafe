@@ -51,16 +51,13 @@ class LikedDripshotListView(ListView):
 #     def get(self, request, *args, **kwargs):
 #         dripshots = Dripshot.objects.all()
 #         return render(request, 'dripshot_list.html', {'dripshots': dripshots})
-def cafe_autocomplete(request):
-    if 'term' in request.GET:
-        # 입력된 term 값으로 카페 이름을 검색합니다.
-        qs = Cafe.objects.filter(name__icontains=request.GET.get('term'))
-        # 검색 결과에서 이름만 추출하여 리스트로 만듭니다.
-        names = list(qs.values_list('name', flat=True))
-        # JSON 형식으로 반환합니다.
-        return JsonResponse(names, safe=False)
-    return JsonResponse([], safe=False)
-
+class CafeAutocomplete(View):
+    def get(self, request, *args, **kwargs):
+        if 'term' in request.GET:
+            qs = Cafe.objects.filter(name__icontains=request.GET.get('term'))
+            cafes = list(qs.values('id', 'name'))
+            return JsonResponse(cafes, safe=False)
+        return JsonResponse([], safe=False)
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -74,7 +71,7 @@ class IndexView(View):
         if user.is_authenticated:
             # 사용자의 스타일 키워드 가져오기
             user_keywords = user.style_keywords.all()
-            context['user_keywords'] = user_keywords  # 스타일 키워드를 컨텍스트에 추가
+            context['user_keywords'] = user_keywords
 
             # 사용자의 스타일 키워드와 일치하는 카페들 가져오기
             style_cafe = Cafe.objects.filter(style_keywords__in=user_keywords).distinct()
@@ -87,6 +84,9 @@ class IndexView(View):
             if user.recommend_location:
                 nearby_cafes = Cafe.objects.filter(address__icontains=user.recommend_location)
                 context['cafes'] = nearby_cafes
+                context['recommend_location'] = user.recommend_location  # 추천 위치를 컨텍스트에 추가
+            else:
+                context['recommend_location'] = None  # 추천 위치가 없으면 None으로 설정
 
         return render(request, 'coplate/index.html', context)
 class FollowingReviewListView(LoginRequiredMixin, ListView):
@@ -127,16 +127,16 @@ class Style_CafeListView(ListView):
         user = self.request.user
 
         # 사용자가 선택한 스타일 키워드 가져오기
-        user_keywords = StyleKeyword.objects.filter(style_keywords__user=user)
-
+        user_keywords = user.style_keywords.all()  # 수정된 부분: user 스타일 키워드를 가져옴
+        
         # Q 객체를 사용하여 카페를 필터링
         query = Q()
         for keyword in user_keywords:
-            query |= Q(cafestylekeyword__style_keyword=keyword)
+            query |= Q(style_keywords=keyword)
 
         # 쿼리셋을 필터링하고 전체 항목을 반환
         queryset = Cafe.objects.filter(query).distinct()
-        return queryset[:20]
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -241,10 +241,13 @@ class DripshotDetailView(DetailView):
         if user.is_authenticated:
             dripshot = self.object
             context['dripshot_review'] = dripshot.likes.filter(user=user).exists()
-            context['liked_comments'] = Comment.objects.filter(dripshot=dripshot).filter(likes__user=user)
-
+            context['liked_comments'] = Comment.objects.filter(
+                content_type=ContentType.objects.get_for_model(dripshot),
+                object_id=dripshot.id,
+                likes__user=user
+            )
+        
         return context
-
 class DripshotCreateView(LoginAndverificationRequiredMixin, CreateView):
     model = Dripshot
     form_class = DripshotForm
@@ -252,20 +255,10 @@ class DripshotCreateView(LoginAndverificationRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-
-        # 이미지 필드 목록
-        image_fields = ['image1', 'image2', 'image3', 'image4', 'image5']
-
-        for image_field in image_fields:
-            image = self.request.FILES.get(image_field)
-            if image:
-                setattr(form.instance, image_field, image)
-
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('dripshot-detail', kwargs={'pk': self.object.id})
-
 class DripshotDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
     model = Dripshot
     template_name = 'coplate/dripshot_confirm_delete.html'
@@ -296,7 +289,7 @@ class DripshotUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
 
 class CafeAroundListView(ListView):
     model = Cafe
-    context_object_name = 'caffes'
+    context_object_name = 'cafes'
     template_name = 'coplate/around_list.html'
     paginate_by = 12
 
@@ -318,7 +311,7 @@ class CafeAroundMainListView(ListView):
         user = self.request.user
         if user.is_authenticated and user.recommend_location:
             recommend_location = user.recommend_location
-            return Cafe.objects.filter(address__icontains(recommend_location))
+            return Cafe.objects.filter(address__icontains=recommend_location)
         else:
             return Cafe.objects.none()
 

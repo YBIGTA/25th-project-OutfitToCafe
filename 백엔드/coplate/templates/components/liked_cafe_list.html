@@ -1,3 +1,5 @@
+
+{% load custom_filters %}
 <div class="contents">
     {% for cafe in cafes %}
       <a href="{% url 'cafe-detail' cafe.id %}">
@@ -8,15 +10,14 @@
             <h2 class="title">{{ cafe.name }}</h2>
             <date class="date">{{ cafe.dt_created|date:"Y년 n월 j일" }}</date>
             <div class="metadata">
-              <div class="review-rating">
-                <span class="cp-stars">
-                  {% for i in ""|ljust:cafe.rating %}★{% endfor %}
-                </span>
-              </div>
-              <div class="author">
-                <div class="cp-avatar" style="background-image: url('{{ cafe.author.profile_pic.url }}')"></div>
-                <span>{{ cafe.author.name }}</span>
-              </div>
+                <div class="rating">
+                    {% if cafe.rating is not None %}
+                      {{ cafe.rating|star_rating }}
+                    {% else %}
+                      No rating available
+                    {% endif %}
+                  </div>
+              
             </div>
           </div>
         </section>

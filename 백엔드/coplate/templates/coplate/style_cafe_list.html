@@ -8,7 +8,7 @@
     <div class="header">
       <h2>리뷰 목록</h2>
     </div>
-    {% include "components/style_cafe_list.html" with style_cafe=style_cafe empty_message="아직 리뷰가 없어요:(" %}
+    {% include "components/style_cafe_main_list.html" with style_cafe=style_cafe empty_message="아직 리뷰가 없어요:(" %}
    
     {% if is_paginated %}
       {% include 'components/pagination.html' with page_obj=page_obj %}
