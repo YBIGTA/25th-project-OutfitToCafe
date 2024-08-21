@@ -69,7 +69,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['name', 'profile_pic', 'profile_pic_url', 'birth_date','recommend_location', 'style_keywords']
+        fields = ['name', 'profile_pic','birth_date','recommend_location', 'style_keywords']
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
     #     # 첫 3개의 스타일 키워드만 선택 가능하도록 제한

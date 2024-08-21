@@ -12,8 +12,10 @@ def star_rating(value):
     except ValueError:
         return ''
     
-    full_stars = int(value)
-    half_star = 1 if value - full_stars >= 0.5 else 0
-    empty_stars = 5 - full_stars - half_star
+    rounded_value = int(value)  # 소수점 이하 반올림 없이 정수 부분만 사용
+    if value >= 4.0 and value < 5.0:
+        rounded_value = 4
+    
+    empty_stars = 5 - rounded_value
 
-    return '★' * full_stars + '½' * half_star + '☆' * empty_stars
+    return '★' * rounded_value + '☆' * empty_stars

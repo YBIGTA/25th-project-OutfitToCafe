@@ -20,7 +20,13 @@
           
           <!-- 생성 날짜 -->
           <date class="date">{{ cafe.dt_created|date:"Y년 n월 j일" }}</date>
-          
+          <div class="style-keywords">
+            {% for keyword in cafe.style_keywords.all|slice:":3" %}
+            <span class="cp-chip">{{ keyword }}</span>
+            {% empty %}
+              <span class="cp-chip">스타일 키워드가 없습니다</span>
+            {% endfor %}
+          </div>
           <!-- 리뷰 평점 -->
           <div class="rating">
             {% if cafe.rating is not None %}

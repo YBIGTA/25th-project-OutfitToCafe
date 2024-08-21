@@ -121,14 +121,18 @@ class Style_CafeListView(ListView):
     model = Cafe
     context_object_name = 'style_cafe'
     template_name = 'coplate/style_cafe_list.html'
-    paginate_by = 8
+    paginate_by = 12
 
     def get_queryset(self):
         user = self.request.user
 
         # 사용자가 선택한 스타일 키워드 가져오기
-        user_keywords = user.style_keywords.all()  # 수정된 부분: user 스타일 키워드를 가져옴
-        
+        user_keywords = user.style_keywords.all()
+
+        # 스타일 키워드가 없는 경우 모든 카페 반환
+        if not user_keywords.exists():
+            return Cafe.objects.all()
+
         # Q 객체를 사용하여 카페를 필터링
         query = Q()
         for keyword in user_keywords:
@@ -140,10 +144,9 @@ class Style_CafeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 페이지네이션에 맞게 데이터 제공
+        # 추가적으로 넘겨줄 데이터가 있는지 확인
         context['style_cafe'] = self.get_queryset()
         return context
-
 class Style_CafeMainListView(ListView):
     model = Cafe
     context_object_name = 'style_cafe'
@@ -216,7 +219,7 @@ class CafeListView(ListView):
 
 class DripshotListView(ListView):
     model = Dripshot
-    context_object_name = 'dripshot'
+    context_object_name = 'dripshots'
     template_name = 'coplate/dripshot_list.html'
     paginate_by = 12
 
@@ -248,6 +251,8 @@ class DripshotDetailView(DetailView):
             )
         
         return context
+    
+    
 class DripshotCreateView(LoginAndverificationRequiredMixin, CreateView):
     model = Dripshot
     form_class = DripshotForm
@@ -259,6 +264,8 @@ class DripshotCreateView(LoginAndverificationRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('dripshot-detail', kwargs={'pk': self.object.id})
+    
+
 class DripshotDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
     model = Dripshot
     template_name = 'coplate/dripshot_confirm_delete.html'
@@ -363,6 +370,38 @@ class CafeUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
     def test_func(self, user):
         cafe = self.get_object()
         return cafe.author == user
+    
+
+class DripshotCommentCreateView(CreateView):
+    model = Comment
+    form_class = CommentForm
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        dripshot = get_object_or_404(Dripshot, pk=self.kwargs.get('pk'))
+        form.instance.content_object = dripshot
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('dripshot-detail', kwargs={'pk': self.object.content_object.id})
+
+
+class DripshotCommentUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'coplate/dripshot_comment_update.html'
+    pk_url_kwarg = 'pk'
+
+    def get_success_url(self):
+        return reverse('dripshot-detail', kwargs={'pk': self.object.content_object.id})
+
+class DripshotCommentDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
+    model = Comment
+    template_name = 'coplate/dripshot_comment_delete.html'
+    pk_url_kwarg = 'pk'
+
+    def get_success_url(self):
+        return reverse('dripshot-detail', kwargs={'pk': self.object.content_object.id})
 
 class CommentCreateView(LoginAndverificationRequiredMixin, CreateView):
     http_method_names = ['post']
@@ -371,11 +410,14 @@ class CommentCreateView(LoginAndverificationRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.review = Cafe.objects.get(id=self.kwargs.get('pk'))
+        pk_value = self.kwargs.get('pk')
+        print(f"Trying to find Cafe with pk={pk_value}")
+        cafe = Cafe.objects.get(pk=pk_value)
+        form.instance.content_object = cafe
         return super().form_valid(form)
-
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'pk': self.object.id})
+        return reverse('cafe-detail', kwargs={'pk': self.object.content_object.id})
+
 
 class CommentUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
     model = Comment
@@ -384,7 +426,7 @@ class CommentUpdateView(LoginAndOwnershipRequiredMixin, UpdateView):
     pk_url_kwarg = 'pk'
 
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'pk': self.object.review.id})
+        return reverse('cafe-detail', kwargs={'pk': self.object.content_object.id})
 
 class CommentDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
     model = Comment
@@ -392,7 +434,7 @@ class CommentDeleteView(LoginAndOwnershipRequiredMixin, DeleteView):
     pk_url_kwarg = 'pk'
 
     def get_success_url(self):
-        return reverse('review-detail', kwargs={'pk': self.object.review.id})
+        return reverse('cafe-detail', kwargs={'pk': self.object.content_object.id})
 
 class ProcessLikeView(LoginAndverificationRequiredMixin, View):
     http_method_names = ['post']

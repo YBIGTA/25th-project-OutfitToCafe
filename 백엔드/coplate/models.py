@@ -68,19 +68,11 @@ class Cafe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cafes')
     likes = GenericRelation('Like', related_query_name='dripshot')
     style_keywords = models.ManyToManyField(StyleKeyword, blank=True, related_name='cafes')  # Added this line
+    comments = GenericRelation('Comment', related_query_name='cafes')
 
     def __str__(self):
         return self.name
 
-# class UserStyleKeyword(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     style_keyword = models.ForeignKey(StyleKeyword, on_delete=models.CASCADE)
-
-#     class Meta:
-#         unique_together = ('user', 'style_keyword')
-
-#     def __str__(self):
-#         return f'{self.user.email} - {self.style_keyword.keyword}'
 
 class Dripshot(models.Model):
     title = models.CharField(max_length=50)
@@ -108,6 +100,7 @@ class Dripshot(models.Model):
         (5, '★★★★★'),
     ]
     rating = models.IntegerField(choices=RATING_CHOICES, default=None, null=True, blank=True)
+    comments = GenericRelation('Comment', related_query_name='cafes')
 
     def __str__(self):
         return self.title
@@ -133,8 +126,8 @@ class Comment(models.Model):
     dt_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     likes = GenericRelation('Like', related_query_name='comments')
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, default=1)
-    object_id = models.PositiveIntegerField(default=1)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):

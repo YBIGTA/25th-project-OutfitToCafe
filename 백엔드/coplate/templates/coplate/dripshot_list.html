@@ -1,14 +1,14 @@
 {% extends "coplate_base/base_with_navbar.html" %}
 
-{% block title %}리뷰 목록 ({{ paginator.count }}) | Drip-Shot{% endblock title %}
+{% block title %}드립샷 ({{ paginator.count }}) | Drip-Shot{% endblock title %}
 
 {% block content %}
 <main class="site-body">
   <div class="content-list max-content-width">
     <div class="header">
-      <h2>리뷰 목록</h2>
+      <h2>드립샷</h2>
     </div>
-    {% include "components/dripshot_list.html" with dripshot=dripshot empty_message="아직 리뷰가 없어요:(" %}
+    {% include "components/dripshot_main_list.html" with dripshot=dripshots empty_message="아직 리뷰가 없어요:(" %}
    
     {% if is_paginated %}
       {% include 'components/pagination.html' with page_obj=page_obj %}

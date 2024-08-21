@@ -9,11 +9,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'coplate/styles/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'coplate/styles/theme.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'coplate/favicon/favicon.ico' %}">
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jQuery 추가 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- 그 다음에 select2.js 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     <title>{% block title %}Drip Shot{% endblock title %}</title>
   </head>

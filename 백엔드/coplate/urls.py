@@ -87,18 +87,18 @@ urlpatterns = [
 
 
     # comment
-    path(
-        'reviews/<int:review_id>/comments/create/',
-        views.CommentCreateView.as_view(),
-        name='comment-create',
-    ),
-
-    path('comments/<int:comment_id>/edit/', 
-         views.CommentUpdateView.as_view(), 
-         name='comment-update'),
-    path('comments/<int:comment_id>/delete/', 
-         views.CommentDeleteView.as_view(), 
-         name='comment-delete'),
+   path(
+    'cafes/<int:pk>/comments/create/',
+    views.CommentCreateView.as_view(),
+    name='comment-create',
+),
+    path('cafes/comments/<int:pk>/edit/', 
+     views.CommentUpdateView.as_view(), 
+     name='comment-update'),
+    path('cafes/comments/<int:pk>/delete/', 
+     views.CommentDeleteView.as_view(), 
+     name='comment-delete'),
+    path('dripshots/<int:pk>/comments/create/', views.DripshotCommentCreateView.as_view(), name='dripshot-comment-create'),
 
     # like
     path(
@@ -108,14 +108,14 @@ urlpatterns = [
     ),
     # follow
     path(
-        'users/<int:user_id>/follow/',
+        'users/<int:pk>/follow/',
         views.ProcessFollowView.as_view(),
         name='process-follow',
     ),
-    path('users/<int:user_id>/following/', 
+    path('users/<int:pk>/following/', 
          views.FollowingListView.as_view(),
            name='following-list'),
-    path('users/<int:user_id>/followers/', 
+    path('users/<int:pk>/followers/', 
          views.FollowerListView.as_view(),
            name='follower-list'),
 
