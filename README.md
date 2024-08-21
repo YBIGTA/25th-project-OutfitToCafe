@@ -17,7 +17,7 @@ This website takes a picture of the outfit you are currently wearing to give you
    	-  EfficientNet
    - Final Classification model located at CNN_Models
    	- Outputs JSON file with vector filled with classification probabilities
-  ![Alt text](./CNN_Model/Classification_Results/classification_results.json)
+  ![Alt text](.CNN_Model/Classification_Results/classification_results.json)
    	- Top_Classification_probabilities used in final implemnentation
 3. NLP
    - Bert
