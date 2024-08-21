@@ -25,7 +25,7 @@ This website takes a picture of the outfit you are currently wearing to give you
 
 ## Authors
 
-Minseo Kim, Dogeun Im, Jiyeon Seo, Isaac Chung, Jaebin Cheong
+Minseo Kim (DA), Dogeun Im (DA), Jiyeon Seo (DA), Isaac Chung (DE), Jaebin Cheong (DS)
 
 ## Version History
 
