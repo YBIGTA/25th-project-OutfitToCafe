@@ -6,20 +6,28 @@
 <header class="site-header navbar">
   <div class="content max-width">
     <a href="{% url 'index' %}">
-      <img class="logo" src="{% static 'coplate/assets/logo.jpg' %}" alt="Drip Shot">
+      <img class="logo" src="{% static 'coplate/assets/logo.svg' %}" alt="Drip Shot">
     </a>
+    <form class="search-form" action="{% url 'search' %}" method="get">
+      <input class="search-input" name="query" type="text" placeholder="식당, 음식 등을 검색해보세요" required>
+      <button class="cp-button search-button" type="submit">검색</button>
+
+      <button type="button" class="search-image-button" style="margin-left: 10px; background: none; border: none; cursor: pointer;">
+      </button>
+    </form>
     <nav>
+      
       <ul class="navbar">
         {% if user.is_authenticated %}
           {% if user.is_staff %}
             <li><a href="{% url 'admin:index' %}">관리자</a></li>
             <li><a href="{% url 'cafe-create' %}">만들기</a></li>
-
+            
           {% endif %}
-          <li><a href="{% url 'dripshot-create' %}">드립샷만들기</a></li>
-          <li><a href="{% url 'image-upload' %}">이미지</a></li>
+          <!-- <li><a href="{% url 'dripshot-create' %}">드립샷만들기</a></li>
+          <li><a href="{% url 'image-upload' %}">이미지</a></li> -->
 
-          <li><a href="{% url 'profile' user.id %}">내 프로필</a></li>
+          <!-- <li><a href="{% url 'profile' user.id %}">내 프로필</a></li> -->
           <li><a href="{% url 'account_logout' %}">로그아웃</a></li>
         {% else %}
           <li><a href="{% url 'account_login' %}">로그인</a></li>

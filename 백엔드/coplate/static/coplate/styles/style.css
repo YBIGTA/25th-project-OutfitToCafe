@@ -1525,3 +1525,71 @@ a.like-button:hover {
   list-style: none;
   margin: 5px 0;
 }
+.image-container {
+  text-align: center; /* Center the image horizontally */
+}
+
+.main-image {
+  width: auto;
+  height: auto;
+  max-width: 100%; /* Ensure the image scales correctly */
+  margin-bottom: 20px; /* Add space between the image and the buttons */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Space between the buttons */
+  flex-wrap: nowrap;
+  margin: 450px;
+  flex-direction: row;
+}
+
+.button-container a {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #000000;
+  border-radius: 5px;
+  text-align: center;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 200px; /* Space between the buttons */
+}
+
+.button-image {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  color: #000000;
+  text-decoration: none;
+  border-radius: 5px;
+  background-image: url("{% static 'coplate/assets/dripshot_button.svg' %}");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 20px 20px;
+  padding-left: 40px;
+}
+
+.button-dripshot {
+  background-color: #4285f4;
+  padding: 10px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid #4285f4;
+}
+
+.button-profile {
+  background-color: #34a853;
+  padding: 10px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.button-container img {
+  width: 200px; /* 이미지의 너비를 30px로 설정 */
+  height: 50px; /* 이미지의 높이를 30px로 설정 */
+  /* vertical-align: middle; 이미지가 텍스트와 수직으로 중앙 정렬되도록 설정 */
+}

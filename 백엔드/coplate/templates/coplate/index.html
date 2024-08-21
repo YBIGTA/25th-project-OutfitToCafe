@@ -1,21 +1,24 @@
 {% extends "coplate_base/base_with_navbar.html" %}
-
 {% load static %}
 {% block content %}
 <main class="site-body index">
   <div class="main-header">
-    <div class="fg"></div>
+    <div class="fg">
+
+      <div class="image-container">
+        <!-- <img src="{% static 'coplate/assets/dripshot_button.svg' %}" alt="Drip Shot Image" class="main-image"> -->
+      </div>
+      <div class="button-container">
+        <a href="{% url 'image-upload' %}" class="button-profile">
+          <img src="/static/coplate/assets/find.png"></a>
+        <a href="{% url 'dripshot-create' %}" class="button-profile">
+          <img src="/static/coplate/assets/community.png"></a>
+        <a href="{% url 'profile' user.id %}" class="button-profile">
+          <img src="/static/coplate/assets/mypage.png"></a>
+    </div>
+    </div>
     <div class="content">
       <h1></h1>
-      <div class="header-search">
-        <form class="search-form" action="{% url 'search' %}" method="get">
-          <input class="search-input" name="query" type="text" placeholder="식당, 음식 등을 검색해보세요" required>
-          <button class="cp-button search-button" type="submit">검색</button>
-
-          <button type="button" class="search-image-button" style="margin-left: 10px; background: none; border: none; cursor: pointer;">
-          </button>
-        </form>
-      </div>
       <div class="keyword-list">
         {% for keyword in cafe_keywords %}
           <a href="{% url 'search' %}?query={{ keyword }}" class="cp-chip-keyword green">{{ keyword }}</a>
@@ -25,6 +28,7 @@
   </div>
   
   <div class="content-list max-content-width">
+    
     <div class="header">
       <h2>오늘의 드립샷</h2>
       <a class="cp-ic-button circle newreview" href="{% url 'dripshot-list' %}" data-login-required>더보기</a>
