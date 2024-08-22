@@ -2,25 +2,15 @@
 
 This website takes a picture of the outfit you are currently wearing to give you cafe recommendations based on the outfit you are wearing! 
 
-## Implementation Description
+## Project Description: 
 
-1. Data Scraping (폴더명)
-   - https://www.musinsa.com/snap/main/recommend (Style/Images)
-   - https://map.naver.com/p/search/%EC%84%B1%EC%88%98%EC%97%AD%20%EC%B9%B4%ED%8E%98?c=14.00,0,0,0,dh (Cafes) 
-2. CNN Model
-   - Experimentations are located at CNN_Experimentations
-   	-  ResNet-18
-   	-  EfficientNet
-   - Final Classification model located at CNN_Models
-   	- Outputs JSON file with vector filled with [classification probabilities](CNN_Model/Classification_Results/classification_results.json)
-   	- [Top_Classification_probabilities](CNN_Model/Classification_Results/top_classification_results.json) used in final implementation
-3. NLP
-   - Bert
-   - 
-4. Website
-   - 설명 부탁드립니다. 
+This project implemented the following methods to create the website described above: 
+- Data Scraping 
+- NLP
+- CNN
+- Front/Back-end Engineering
 
-
+Please refer to these slides to find out about the creation process and the components of this [project](https://drive.google.com/file/d/1bJ5lEb0KihiMIzQEUx48XPH9Rlpj3qQK/view?usp=drive_link)
 
 
 ## Authors
