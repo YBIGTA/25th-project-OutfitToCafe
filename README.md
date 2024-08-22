@@ -10,7 +10,7 @@ This project implemented the following methods to create the website described a
 - CNN
 - Front/Back-end Engineering
 
-Please refer to these slides to find out about the creation process and the components of this [project](https://drive.google.com/file/d/1bJ5lEb0KihiMIzQEUx48XPH9Rlpj3qQK/view?usp=drive_link)
+Please refer to these slides to find out about the creation process and the components of this [project](https://drive.google.com/file/d/1Wukl8RSSAWe9i8TCER0tJx4dkLYRmkU_/view?usp=drive_link)
 
 
 ## Authors
