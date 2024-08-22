@@ -1,0 +1,38 @@
+[
+    {
+        "restaurant_name": "니드인",
+        "url": "https://m.place.naver.com/restaurant/1935137830/review/visitor?entry=ple&review",
+        "nickname": "lis****",
+        "content": "여기는 까페보단 악세사리 공방에서 취미로(?) 까페도 하는 느낌인데. 악세사리 퀄리티가 미쳤어요. 고가라서 바로 겟하진 못했지만(제가 변덕이심해서 질렀다가 후회할거같아서) 담에갈땐 사러갈거같아용",
+        "date": "22.9.30.금",
+        "revisit": "1번째 방문",
+        "cafe_id": "1935137830"
+    },
+    {
+        "restaurant_name": "니드인",
+        "url": "https://m.place.naver.com/restaurant/1935137830/review/visitor?entry=ple&review",
+        "nickname": "ans****",
+        "content": "사장님이  자신감 있으시고,친절하시고, 디진인도 넘좋아요",
+        "date": "22.5.6.금",
+        "revisit": "1번째 방문",
+        "cafe_id": "1935137830"
+    },
+    {
+        "restaurant_name": "니드인",
+        "url": "https://m.place.naver.com/restaurant/1935137830/review/visitor?entry=ple&review",
+        "nickname": "dud****",
+        "content": "조용한 노래가 나와서 분위기 좋아요",
+        "date": "20.7.24.금",
+        "revisit": "1번째 방문",
+        "cafe_id": "1935137830"
+    },
+    {
+        "restaurant_name": "니드인",
+        "url": "https://m.place.naver.com/restaurant/1935137830/review/visitor?entry=ple&review",
+        "nickname": "미농",
+        "content": "좋아요",
+        "date": "20.11.17.화",
+        "revisit": "1번째 방문",
+        "cafe_id": "1935137830"
+    }
+]
