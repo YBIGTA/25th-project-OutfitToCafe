@@ -124,16 +124,7 @@ WSGI_APPLICATION = 'coplate_project.wsgi.application'
 #         'PORT':env("DB_PORT"), 
 #     }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'drip_shot',
-#         'USER': 'isaac',
-#         'PASSWORD': 'sharon11@@',
-#         'HOST':'localhost',# 원격 서버 이용하면 바꿔야됨 
-#         'PORT':'5432', 
-#     }
-# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

@@ -104,7 +104,7 @@ class Dripshot(models.Model):
     comments = GenericRelation('Comment', related_query_name='cafes')
 
     def __str__(self):
-        return self.title
+        return self.title 
 
 class Like(models.Model):
     dt_created = models.DateTimeField(auto_now_add=True)
