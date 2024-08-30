@@ -1,0 +1,20 @@
+{
+    "selfie_file": "C:/Users/lgsc0/Desktop/신기플/classification_results.json",
+    "recommendations": [
+        {
+            "Rank": 1,
+            "Cafe": "파티세리 후르츠",
+            "Score": 0.43768616489849366
+        },
+        {
+            "Rank": 2,
+            "Cafe": "이트앤드링크 성수",
+            "Score": 0.38990692693637885
+        },
+        {
+            "Rank": 3,
+            "Cafe": "아이오쓰리 에이스하이엔드점",
+            "Score": 0.3617951636653544
+        }
+    ]
+}
